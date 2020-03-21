@@ -6,6 +6,7 @@ import morgan from "morgan";
 import ExpressError from "./classes/ExpressError";
 import mongoose from "mongoose";
 import config from "./config";
+import MultipleChoiceTasks from './multiplechoicetasks/routes';
 
 
 // Create a new express application instance
@@ -26,6 +27,7 @@ ${!mongoUserAuth ? "" : "@"}${config.mongodb.domain || "localhost"}:\
 ${config.mongodb.port || 27017}/${config.mongodb.database}`, { useNewUrlParser: true, useUnifiedTopology: true });
 
 app.use("/user", UserManageRouter);
+app.use("/multiplechoicetask", MultipleChoiceTasks);
 
 app.use((req, res, next) => {
     const error: ExpressError = new ExpressError("Not found");
