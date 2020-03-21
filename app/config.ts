@@ -5,5 +5,6 @@ export default ({
         username: null,
         password: null,
         database: "test"
-    }
+    },
+    jsonwebtoken: "xcvhojpüoizuxzcvbonpüpzxytzrczvubioixyterxv33467iouboiüucixuryxcvnmnbhgfgbinpcxyxrvzbunnbvtx6yxcvbnmiuzurzewaerdizuoztshdfgz0978s5dtb"
 });
