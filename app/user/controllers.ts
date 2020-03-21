@@ -36,12 +36,16 @@ const Signup: RequestHandler = async (req: Request, res: Response, next: Functio
     if (checkString.min(req.body.firstname, 3)) return next(new ExpressError("FIRSTNAME_TOO_SHORT", "You have to provide a firstname with a length of at least 3 chars.", 400));
     if (checkString.max(req.body.firstname, 50)) return next(new ExpressError("FIRSTNAME_TOO_LONG", "You have to provide a firstname with a maximum length of 50 chars.", 400));
 
-    let existing = await UserM.find({ email: req.body.email }).exec();
-    if (existing.length == null || existing.length == 0) return next(new ExpressError("EMAIL_ALREADY_REGISTERED", "You have provided an email that already exists", 400));
+    try {
+        let existing = await UserM.find({ email: req.body.email }).exec();
+        if (existing.length == null || existing.length == 0) return next(new ExpressError("EMAIL_ALREADY_REGISTERED", "You have provided an email that already exists", 400));
 
-    existing = await UserM.find({ username: req.body.username }).exec();
-    if (existing.length == null || existing.length == 0) return next(new ExpressError("USERNAME_ALREADY_REGISTERED", "You have provided an username that already exists", 400));
-
+        existing = await UserM.find({ username: req.body.username }).exec();
+        if (existing.length == null || existing.length == 0) return next(new ExpressError("USERNAME_ALREADY_REGISTERED", "You have provided an username that already exists", 400));
+    }
+    catch (e) {
+        return next(new ExpressError("INTERNAL_ERROR_CHECKING_DUPICATES", e.message, 500));
+    }
     let hashed: string;
 
     try {
@@ -49,6 +53,8 @@ const Signup: RequestHandler = async (req: Request, res: Response, next: Functio
     } catch (e) {
         return next(new ExpressError("INTERNAL_ERROR_HASHING", e.message, 500));
     }
+
+    console.log(hashed);
 
     const createdUser = new UserM({
         _id: new mongoose.Types.ObjectId(),
@@ -59,10 +65,9 @@ const Signup: RequestHandler = async (req: Request, res: Response, next: Functio
         password: hashed
     })
 
-    let user: mongoose.Document
 
     try {
-        user = await createdUser.save()
+        await createdUser.save()
     } catch (e) { return next(new ExpressError("INTERNAL_ERROR_SAVING_USER", e.message, 500)); }
 
     res.status(201).json({
