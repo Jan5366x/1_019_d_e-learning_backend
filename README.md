@@ -1,8 +1,16 @@
 # Digitale_Schule Backend
-1_019_d_e_learning
+_1_019_d_e_learning_
 
-Plannung (WIP)
+`#WevsVirusHack` `#Digitale_Schule`
+
+**Gitlab Board**
+
+https://gitlab.com/1_019_d_e_learning/backend/backend/-/boards
+
+**Plannung (WIP)**
+
 https://docs.google.com/document/d/1EJLsloBCJJp4BcZJ_xA749Ol1L-GZZGtNOxPfrIv_jU/edit
 
-`#WevsVirusHack`
-`#Digitale_Schule`
+**Frontend Endpoint Requests**
+
+https://docs.google.com/document/d/1zZ5xuPrcVvRiczGEufjSUZ82F60toGsUzg70NWrQUGs/edit#
