@@ -2,11 +2,11 @@
   "name": "backend",
   "version": "1.0.0",
   "description": "",
-  "main": "index.js",
+  "main": "./build/app.js",
   "scripts": {
     "tsc": "tsc",
     "test": "ts-node-dev --respawn --transpileOnly ./app/app.ts",
-    "build": "tsc && node ./build/app.js"
+    "build": "tsc && node ."
   },
   "repository": {
     "type": "git",

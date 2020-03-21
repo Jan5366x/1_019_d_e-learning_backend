@@ -1,29 +1,22 @@
 import express from "express";
+import {
+    Login as LoginController,
+    Signup as SignupController,
+    Logout as LogoutController,
+    Grant as GrantController,
+    Revoke as RevokeController,
+    Permissions as PermissionsController,
+    Role as RoleController
+} from "./controllers";
 
 const router: express.Router = express.Router();
 
-router.post("/signup", (req, res) => {
-    res.status(200).json({ message: "OK!" });
-});
-
-router.post("/login", (req, res) => {
-    res.status(200).json({ message: "OK!" });
-});
-
-router.post("/logout", (req, res) => {
-    res.status(200).json({ message: "OK!" });
-});
-
-router.post("/grant", (req, res) => {
-    res.status(200).json({ message: "OK!" });
-});
-
-router.post("/revoke", (req, res) => {
-    res.status(200).json({ message: "OK!" });
-})
-
-router.get("/permission", (req, res) => {
-    res.send("Permission Here");
-})
+router.post("/signup", SignupController);
+router.post("/login", LoginController);
+router.post("/logout", LogoutController);
+router.post("/grant", GrantController);
+router.post("/revoke", RevokeController)
+router.get("/permissions", PermissionsController)
+router.get("/role", RoleController)
 
 export default router;
