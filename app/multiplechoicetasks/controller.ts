@@ -68,7 +68,7 @@ function validate(body: any, next: Function): void {
         return;
     }
     if (body.type == null || body.type > 2) {
-        next(new BadRequestError('TYPE_REQUIRED', 'type' + ERROR_MESSAGE_NULL + ' and has to be 0 or 1'));
+        next(new BadRequestError('TYPE_REQUIRED', `type ${ERROR_MESSAGE_NULL} and has to be 0 or 1`));
         return;
     }
     if (body.taskDescription == null) {
@@ -80,20 +80,20 @@ function validate(body: any, next: Function): void {
         return;
     }
     if (body.answers == null || body.answers.length == 0) {
-        next(new BadRequestError('ANSWER_NAME_REQUIRED', 'name' + ERROR_MESSAGE_NULL + ' or empty'));
+        next(new BadRequestError('ANSWER_NAME_REQUIRED', `name ${ERROR_MESSAGE_NULL} or empty`));
         return;
     }
     for (let index = 0; index < body.answers.length; index++) {
         if (body.answers[index].correct == null ) {
-            next(new BadRequestError('ANSWER_CORRECT_REQUIRED', 'answers[' + index + '].correct are not allowed to be null'));
+            next(new BadRequestError('ANSWER_CORRECT_REQUIRED', `answers  ${index}].correct are not allowed to be null`));
             return;
         }
         if (body.answers[index].title == null) {
-            next(new BadRequestError('ANSWER_TITLE_REQUIRED', 'answers[' + index + '].title are not allowed to be null'));
+            next(new BadRequestError('ANSWER_TITLE_REQUIRED', `answers  ${index}].title are not allowed to be null`));
             return;
         }
         if (body.answers[index].title.length > 255) {
-            next(new BadRequestError('ANSWER_TITLE_TO_LONG', 'answers[' + index + '].title is longer then allowed => max 255 chars'));
+            next(new BadRequestError('ANSWER_TITLE_TO_LONG', `answers  ${index}].title is longer then allowed => max 255 chars`));
             return;
         }
     }

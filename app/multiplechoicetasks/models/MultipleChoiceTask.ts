@@ -1,5 +1,4 @@
 import mongoose from 'mongoose';
-import MultipleChoiceType from './MultipleChoiceType';
 import Answer, { AnswerSchema } from './Answer';
 
 const MultipleChoiceTaskSchema = new mongoose.Schema({  
@@ -13,7 +12,7 @@ const MultipleChoiceTaskSchema = new mongoose.Schema({
         minlength: 3,
         maxlength: 255
     },
-    type: { // Oder als String, beides Möglich finde einen Integer aber schöner. Man muss halt klar definieren was jetzt Single/Multiple ist
+    type: {
         type: Number,
         required: true,
     },
