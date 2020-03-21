@@ -1,0 +1,40 @@
+stages:
+  - build 
+  - deploy
+
+.build_docker:
+    image:
+        name: gcr.io/kaniko-project/executor:debug
+        entrypoint: [""]
+    script:
+        - |
+            echo "{
+                \"auths\": {
+                    \"$CI_REGISTRY\": {
+                        \"username\": \"$CI_REGISTRY_USER\",
+                        \"password\": \"$CI_REGISTRY_PASSWORD\"
+                    }
+                }
+            }" > /kaniko/.docker/config.json &&
+            /kaniko/executor\
+                --context $CI_PROJECT_DIR \
+                --dockerfile $CI_PROJECT_DIR/dockerfile \
+                --destination $CI_REGISTRY_IMAGE:$REGISTRY_IMAGE_TAG
+
+# tag / branch commits are tagged with the "name"
+build_container:
+    extends: .build_docker
+    stage: build
+    variables:
+      REGISTRY_IMAGE_TAG: "latest"
+    only:
+      - master
+
+# purposes
+deploy_to_aws:
+  stage: deploy 
+  only:
+    - master
+  script:
+    - aws --version
+    
