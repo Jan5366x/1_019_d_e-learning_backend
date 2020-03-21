@@ -3,8 +3,8 @@ import { S3 } from "aws-sdk";
 import ExpressError from "../classes/ExpressError";
 
 const s3 = new S3({
-    accessKeyId: '',
-    secretAccessKey: ''
+    accessKeyId: $ACCESS_KEY,
+    secretAccessKey: $SECRET_ACCESS_KEY
 });
 
 const CreateBucket: RequestHandler = (req: Request, res: Response, next: Function) => {
