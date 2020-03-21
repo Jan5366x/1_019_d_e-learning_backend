@@ -45,6 +45,9 @@ app.use((req, res, next) => {
 // Error handling
 
 app.use((error: ExpressError, req: express.Request, res: express.Response, next: Function) => {
+    if (error.needAuth)
+        res.header("WWW-Authenticate",
+            'Basic realm="Log in/Get token for the application", charset="UTF-8"')
     res.status(error.status || 500);
     res.json({
         error: {
@@ -52,6 +55,8 @@ app.use((error: ExpressError, req: express.Request, res: express.Response, next:
             err: error.humanReadableError
         }
     });
+
+    if (error.message.includes("INTERNAL_ERROR")) console.error(error);
 });
 
 // Start Server

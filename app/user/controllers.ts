@@ -9,8 +9,64 @@ import config from "../config"
 
 const emailRegex: RegExp = /(?:[a-z0-9!#$%&'*+/=?^_`{|}~-]+(?:\.[a-z0-9!#$%&'*+/=?^_`{|}~-]+)*|"(?:[\x01-\x08\x0b\x0c\x0e-\x1f\x21\x23-\x5b\x5d-\x7f]|\\[\x01-\x09\x0b\x0c\x0e-\x7f])*")@(?:(?:[a-z0-9](?:[a-z0-9-]*[a-z0-9])?\.)+[a-z0-9](?:[a-z0-9-]*[a-z0-9])?|\[(?:(?:(2(5[0-5]|[0-4][0-9])|1[0-9][0-9]|[1-9]?[0-9]))\.){3}(?:(2(5[0-5]|[0-4][0-9])|1[0-9][0-9]|[1-9]?[0-9])|[a-z0-9-]*[a-z0-9]:(?:[\x01-\x08\x0b\x0c\x0e-\x1f\x21-\x5a\x53-\x7f]|\\[\x01-\x09\x0b\x0c\x0e-\x7f])+)\])/;
 
-const Login: RequestHandler = (req: Request, res: Response, next: Function) => {
-    res.status(200).json({ message: "OK!" });
+const Login: RequestHandler = async (req: Request, res: Response, next: Function) => {
+    if (req.body.email == null) return next(new ExpressError("EMAIL_REQUIRED", "You have to provide an email address.", 400));
+    if (req.body.username == null && req.body.password == null) return next(new ExpressError("USERNAME_OR_PASSWORD_REQUIRED", "You have to provide either a username or a password.", 400));
+
+    if (!emailRegex.test(req.body.email)) return next(new ExpressError("EMAIL_FORMAT_ERROR", "You have provided an inavlid email address.", 400));
+    if (checkString.max(req.body.email, 255)) return next(new ExpressError("EMAIL_TOO_LONG", "You have to provide an email address with a maximum length of 255 chars.", 400));
+
+    if (checkString.min(req.body.username, 6)) return next(new ExpressError("USERNAME_TOO_SHORT", "You have to provide a username with a length of at least 6 chars.", 400));
+    if (checkString.max(req.body.username, 50)) return next(new ExpressError("USERNAME_TOO_LONG", "You have to provide a username with a maximum length of 50 chars.", 400));
+
+    if (checkString.min(req.body.password, 6)) return next(new ExpressError("PASSWORD_TOO_SHORT", "You have to provide a password with a length of at least 6 chars.", 400));
+    if (checkString.max(req.body.password, 255)) return next(new ExpressError("PASSWORD_TOO_LONG", "You have to provide a password with a maximum length of 255 chars.", 400));
+    if ((typeof req.body.password === 'string' || req.body.password instanceof String) &&
+        req.body.password.split("").every((char: string) => char == req.body.password[0]))
+        return next(new ExpressError("PASSWORD_NOT_ENOUGH_ENTROPY", "You have to provide an password with enough entropy.", 400));
+
+    let user: mongoose.Document | null;
+
+    try {
+        if (req.body.username != null) {
+            user = await UserM.findOne({ username: req.body.username }).populate("Role").exec()
+        }
+        else {
+            user = await UserM.findOne({ email: req.body.email }).populate("Role").exec()
+        }
+    }
+    catch (e) {
+        return next(new ExpressError("INTERNAL_ERROR_GETTING_USER", e.message, 500));
+    }
+
+    if (user == null) return next(new ExpressError("USER_NOT_KNOWN", "Couldn't find user. Maybe want to signup?", 400));
+
+    let valid: boolean;
+
+    try {
+        valid = await bcrypt.compare(req.body.password, user!!.get("password"));
+    } catch (e) {
+        return next(new ExpressError("INTERNAL_ERROR_VALIDATING_PASSWORD", e.message, 500));
+    }
+
+    if (!valid) return next(new ExpressError("INVALID_PASSWORD", "You have to provide the correct Password for your account.", 400, true));
+
+    return res.status(200).json({
+        message: "LOGGED_IN",
+        token: jsonwebtoken.sign({
+            email: user!!.get("email"),
+            _id: user._id,
+            permissions: user!!.get("permissions"),
+            role: user!!.get("role")
+        }, config.jsonwebtoken, { expiresIn: 3700 }),
+        user: {
+            email: user!!.get("email"),
+            _id: user._id,
+            permissions: user!!.get("permissions"),
+            role: user!!.get("role")
+        },
+        requests: []
+    })
 };
 
 const Signup: RequestHandler = async (req: Request, res: Response, next: Function) => {
