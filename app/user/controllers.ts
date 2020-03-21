@@ -94,10 +94,10 @@ const Signup: RequestHandler = async (req: Request, res: Response, next: Functio
 
     try {
         let existing = await UserM.find({ email: req.body.email }).exec();
-        if (existing.length == null || existing.length == 0) return next(new ExpressError("EMAIL_ALREADY_REGISTERED", "You have provided an email that already exists", 400));
+        if (existing.length != null && existing.length != 0) return next(new ExpressError("EMAIL_ALREADY_REGISTERED", "You have provided an email that already exists", 400));
 
         existing = await UserM.find({ username: req.body.username }).exec();
-        if (existing.length == null || existing.length == 0) return next(new ExpressError("USERNAME_ALREADY_REGISTERED", "You have provided an username that already exists", 400));
+        if (existing.length != null && existing.length != 0) return next(new ExpressError("USERNAME_ALREADY_REGISTERED", "You have provided an username that already exists", 400));
     }
     catch (e) {
         return next(new ExpressError("INTERNAL_ERROR_CHECKING_DUPICATES", e.message, 500));
