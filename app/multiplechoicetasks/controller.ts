@@ -1,22 +1,22 @@
 import { RequestHandler, Request, Response } from 'express';
-import mongoose, { model, get } from 'mongoose';
+import mongoose from 'mongoose';
 import MultipleChoiceTask from './models/MultipleChoiceTask';
-import Answer, { AnswerSchema, Answer } from './models/Answer';
 import BadRequestError from '../classes/BadRequestError';
+import Answer from './models/Answer';
 
-const Post: RequestHandler = (req: Request, res: Response) => {
-    const multipleChoiceTask = postMultipleChoiceTask(req.body);
+const Post: RequestHandler = (req: Request, res: Response, next: Function) => {
+    const multipleChoiceTask = postMultipleChoiceTask(req.body, next);
     res.send(multipleChoiceTask);
 };
 
-const PostCollection: RequestHandler = (req: Request, res: Response) => {
+const PostCollection: RequestHandler = (req: Request, res: Response, next: Function) => {
     const results: any[] = [];
     if (req.body.length > 0) {
         req.body.forEach((element: any) => {
-            results.push(postMultipleChoiceTask(element));
+            results.push(postMultipleChoiceTask(element, next));
         });
     } else {
-        throw new BadRequestError('Collection is not allowed to be emty')
+        throw new BadRequestError('COLLECTION_REQUIRED', 'Collection is not allowed to be emty')
     }
     res.send(results);
 }
@@ -26,7 +26,7 @@ const Get: RequestHandler = async (req: Request, res: Response, next: Function) 
     if (result != null) {
         res.send(result);
     } else {
-        next(new BadRequestError('No MultipleChoiceTask found for ' + req.params.id));
+        next(new BadRequestError('TASK_REQUIRED', 'No MultipleChoiceTask found for ' + req.params.id));
     }
 };
 
@@ -49,10 +49,8 @@ const Delete: RequestHandler = (req: Request, res: Response) => {
     });
 };
 
-export { Post, Get, Put, Delete, GetCollection, PostCollection };
-
-function postMultipleChoiceTask(body: any): any {
-    validate(body);
+function postMultipleChoiceTask(body: any, next: Function): any {
+    validate(body, next);
     const multipleChoiceTask = getMultipleChoiceTask(body);
     multipleChoiceTask.save();
     return multipleChoiceTask;
@@ -60,34 +58,43 @@ function postMultipleChoiceTask(body: any): any {
 
 const ERROR_MESSAGE_NULL = ' is not allowed to be null';
 
-function validate(body: any): void {
+function validate(body: any, next: Function): void {
     if (body.name == null) {
-        throw new BadRequestError('name' + ERROR_MESSAGE_NULL);
+        next(new BadRequestError('NAME_REQUIRED', 'name' + ERROR_MESSAGE_NULL));
+        return;
     }
     if (body.name.length > 255) {
-        throw new BadRequestError('name is longer then allowed => max 255 chars');
+        next(new BadRequestError('NAME_TO_LONG', 'name is longer then allowed => max 255 chars'));
+        return;
     }
     if (body.type == null || body.type > 2) {
-        throw new BadRequestError('type' + ERROR_MESSAGE_NULL + ' and has to be 0 or 1');
+        next(new BadRequestError('TYPE_REQUIRED', 'type' + ERROR_MESSAGE_NULL + ' and has to be 0 or 1'));
+        return;
     }
     if (body.taskDescription == null) {
-        throw new BadRequestError('taskDescription' + ERROR_MESSAGE_NULL);
+        next(new BadRequestError('TASK_DESCRIPTION_REQUIRED', 'taskDescription' + ERROR_MESSAGE_NULL));
+        return;
     }
     if (body.taskDescription.length > 5000) {
-        throw new BadRequestError('tasDescription is longer then allowed => max 5000 chars');
+        next(new BadRequestError('TASK_DESCRIPTION_TO_LONG', 'tasDescription is longer then allowed => max 5000 chars'));
+        return;
     }
     if (body.answers == null || body.answers.length == 0) {
-        throw new BadRequestError('name' + ERROR_MESSAGE_NULL + ' or empty');
+        next(new BadRequestError('ANSWER_NAME_REQUIRED', 'name' + ERROR_MESSAGE_NULL + ' or empty'));
+        return;
     }
     for (let index = 0; index < body.answers.length; index++) {
         if (body.answers[index].correct == null ) {
-            throw new BadRequestError('answers[' + index + '].correct are not allowed to be null');
+            next(new BadRequestError('ANSWER_CORRECT_REQUIRED', 'answers[' + index + '].correct are not allowed to be null'));
+            return;
         }
         if (body.answers[index].title == null) {
-            throw new BadRequestError('answers[' + index + '].title are not allowed to be null');
+            next(new BadRequestError('ANSWER_TITLE_REQUIRED', 'answers[' + index + '].title are not allowed to be null'));
+            return;
         }
         if (body.answers[index].title.length > 255) {
-            throw new BadRequestError('answers[' + index + '].title is longer then allowed => max 255 chars');
+            next(new BadRequestError('ANSWER_TITLE_TO_LONG', 'answers[' + index + '].title is longer then allowed => max 255 chars'));
+            return;
         }
     }
 }
@@ -109,3 +116,5 @@ function getAnswers(answers: any): any[] {
     });
     return resultAnswers;
 }
+
+export { Post, Get, Put, Delete, GetCollection, PostCollection };
