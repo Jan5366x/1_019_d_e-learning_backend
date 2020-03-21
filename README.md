@@ -14,3 +14,6 @@ https://docs.google.com/document/d/1EJLsloBCJJp4BcZJ_xA749Ol1L-GZZGtNOxPfrIv_jU/
 **Frontend Endpoint Requests**
 
 https://docs.google.com/document/d/1zZ5xuPrcVvRiczGEufjSUZ82F60toGsUzg70NWrQUGs/edit#
+
+**DevPost**
+https://devpost.com/software/1_019_d_e-learning-digitale-schule#updates
