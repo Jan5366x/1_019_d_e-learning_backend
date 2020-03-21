@@ -51,7 +51,8 @@ app.use((error: ExpressError, req: express.Request, res: express.Response, next:
     res.status(error.status || 500);
     res.json({
         message: error.message,
-        err: error.humanReadableError
+        err: error.humanReadableError,
+        error: true
     });
 
     if (error.message.includes("INTERNAL_ERROR")) console.error(error);
