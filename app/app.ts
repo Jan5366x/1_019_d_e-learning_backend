@@ -1,6 +1,7 @@
 // lib/app.ts
 import express from 'express';
 import UserManageRouter from "./user/routes"
+import DocumentFileRouter from "./documentFile/routes"
 import bodyParser from "body-parser";
 import morgan from "morgan";
 import ExpressError from "./classes/ExpressError";
@@ -26,6 +27,8 @@ ${!mongoUserAuth ? "" : "@"}${config.mongodb.domain || "localhost"}:\
 ${config.mongodb.port || 27017}/${config.mongodb.database}`, { useNewUrlParser: true, useUnifiedTopology: true });
 
 app.use("/user", UserManageRouter);
+
+app.use("/documentFile", DocumentFileRouter);
 
 app.use((req, res, next) => {
     const error: ExpressError = new ExpressError("Not found");
