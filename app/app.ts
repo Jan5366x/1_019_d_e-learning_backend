@@ -5,6 +5,8 @@ import bodyParser from "body-parser";
 import morgan from "morgan";
 import ExpressError from "./classes/ExpressError";
 import mongoose from "mongoose";
+import config from "./config";
+
 
 // Create a new express application instance
 const app: express.Application = express();
@@ -15,7 +17,13 @@ app.use(morgan("dev", { skip: (req, res) => morganExcludedUrls.includes(req.orig
 app.use(bodyParser.urlencoded({ extended: false }));
 app.use(bodyParser.json());
 
-mongoose.connect('mongodb://localhost:27017/test')
+const mongoUserAuth: boolean = (config.mongodb.username != null && config.mongodb.password != null);
+
+mongoose.connect(`mongodb://${!mongoUserAuth ? "" : config.mongodb.username}\
+${!mongoUserAuth ? "" : ":"}\
+${!mongoUserAuth ? "" : config.mongodb.password}\
+${!mongoUserAuth ? "" : "@"}${config.mongodb.domain || "localhost"}:\
+${config.mongodb.port || 27017}/${config.mongodb.database}`, { useNewUrlParser: true, useUnifiedTopology: true });
 
 app.use("/user", UserManageRouter);
 
@@ -25,7 +33,7 @@ app.use((req, res, next) => {
     next(error);
 });
 
-app.use((error: ExpressError, req: express.Request, res: express.Response, next: any) => {
+app.use((error: ExpressError, req: express.Request, res: express.Response, next: Function) => {
     res.status(error.status || 500);
     res.json({
         error: {
