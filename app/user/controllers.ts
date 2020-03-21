@@ -151,23 +151,26 @@ const Signup: RequestHandler = async (req: Request, res: Response, next: Functio
 };
 
 const Logout: RequestHandler = (req: Request, res: Response) => {
-    res.status(200).json({ message: "OK!" });
+    res.status(200).json({ message: "LOGOUT_AUTOMATICALLY", note: "Tokens are saved for one hour. After that, you are automatically logged out. Just remove the token from the Client." });
 }
 
 const Grant: RequestHandler = (req: Request, res: Response) => {
-    res.status(200).json({ message: "OK!" });
+    res.status(501).json({ message: "NOT_IMPLEMENTED" });
 }
 
 const Revoke: RequestHandler = (req: Request, res: Response) => {
-    res.status(200).json({ message: "OK!" });
+    res.status(501).json({ message: "NOT_IMPLEMENTED" });
+
 }
 
 const Permissions: RequestHandler = (req: Request, res: Response) => {
-    res.status(200).json({ message: "OK!" });
+    res.status(501).json({ message: "NOT_IMPLEMENTED" });
+
 }
 
 const Role: RequestHandler = (req: Request, res: Response) => {
-    res.status(200).json({ message: "OK!" });
+    res.status(501).json({ message: "NOT_IMPLEMENTED" });
+
 }
 
 export { Login, Signup, Logout, Revoke, Grant, Permissions, Role };

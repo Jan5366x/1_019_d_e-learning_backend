@@ -50,10 +50,8 @@ app.use((error: ExpressError, req: express.Request, res: express.Response, next:
             'Basic realm="Log in/Get token for the application", charset="UTF-8"')
     res.status(error.status || 500);
     res.json({
-        error: {
-            message: error.message,
-            err: error.humanReadableError
-        }
+        message: error.message,
+        err: error.humanReadableError
     });
 
     if (error.message.includes("INTERNAL_ERROR")) console.error(error);
