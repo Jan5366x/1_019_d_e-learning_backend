@@ -3,6 +3,31 @@ _1_019_d_e_learning_
 
 `#WevsVirusHack` `#Digitale_Schule`
 
+## Installation / Testing
+
+Clonen der Github Repo und dann
+
+```bash
+npm i
+```
+
+Zum testen
+```bash
+npm run test
+```
+Zum starten (release-build)
+```bash
+npm run build
+```
+
+Nur builden (output-dir /build)
+```bash
+npm run tsc
+// und dann starten mit
+node build/app.js
+```
+
+
 ## Organisation
 
 **Gitlab Board**
