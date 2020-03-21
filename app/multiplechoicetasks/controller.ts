@@ -39,7 +39,6 @@ const Put: RequestHandler = (req: Request, res: Response) => {
     const multipleChoiceTask = getMultipleChoiceTask(req);
     multipleChoiceTask._id = undefined;
     MultipleChoiceTask.update({_id: req.params.id}, multipleChoiceTask).then(x => {
-        console.log(x);
         res.send();
     });
 };
@@ -53,7 +52,6 @@ const Delete: RequestHandler = (req: Request, res: Response) => {
 export { Post, Get, Put, Delete, GetCollection, PostCollection };
 
 function postMultipleChoiceTask(body: any): any {
-    console.log(body);
     validate(body);
     const multipleChoiceTask = getMultipleChoiceTask(body);
     multipleChoiceTask.save();
