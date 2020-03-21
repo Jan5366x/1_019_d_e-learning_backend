@@ -1,12 +1,27 @@
 import express from "express";
 import {
     Create as CreateController,
-    Read as ReadController
+    ReadAll as ReadAllController,
+    ReadById as ReadByIdController,
+    ReadByTitle as ReadByTitleController,
+    Update as UpdateController,
+    Delete as DeleteController
 } from "./controllers";
 
 const router: express.Router = express.Router();
 
+//GET ROUTES
+router.get("/", ReadAllController);
+router.get("/:id", ReadByIdController);
+router.get("/one/:title", ReadByTitleController);
+
+//POST ROUTES
 router.post("/create", CreateController);
-router.get("/all", ReadController);
-router.put()
+
+//PUT ROUTES
+router.put("/:id", UpdateController); 
+
+//DELETE ROUTES
+router.delete("/:id", DeleteController);
+
 export default router;
