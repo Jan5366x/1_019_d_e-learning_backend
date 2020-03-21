@@ -1,0 +1,61 @@
+stages:
+  - build
+  - deploy
+
+# skeleton to build container
+.build_container_skeleton:
+  image:
+    name: gcr.io/kaniko-project/executor:debug
+    entrypoint: [""]
+  script:
+    - |
+        echo "{
+            \"auths\": {
+                \"$CI_REGISTRY\": {
+                    \"username\": \"$CI_REGISTRY_USER\",
+                    \"password\": \"$CI_REGISTRY_PASSWORD\"
+                }
+            }
+        }" > /kaniko/.docker/config.json &&
+        /kaniko/executor\
+            --context $CI_PROJECT_DIR \
+            --dockerfile $CI_PROJECT_DIR/dockerfile \
+            --destination $CI_REGISTRY_IMAGE:$REGISTRY_IMAGE_TAG
+
+# prepare deploy image
+.deployer: &deployer
+  image: debian:buster-slim
+  stage: deploy
+  before_script:
+    - export DEBIAN_FRONTEND="noninteractive"
+    - apt-get update -qq
+    - apt-get install -y openssh-client    
+    - eval $(ssh-agent -s)
+    - echo "$SSH_PRIVATE_KEY" | tr -d '\r' | ssh-add -
+    - mkdir -p ~/.ssh
+    - chmod 700 ~/.ssh
+
+
+# Taged with :latest
+build_container:
+  extends: .build_container_skeleton
+  stage: build
+  variables:
+    REGISTRY_IMAGE_TAG: "latest"
+  only:
+    - ci
+    #- master
+
+# deploy image to the EC2
+deploy:  
+  <<: *deployer
+  stage: deploy
+  variables:
+    HOST: "ec2-18-184-245-52.eu-central-1.compute.amazonaws.com"
+  script:
+    - ssh ubuntu@${HOST} -o StrictHostKeyChecking=no "docker --version"
+    - ssh ubuntu@${HOST} -o StrictHostKeyChecking=no "docker login -u $CI_REGISTRY_USER -p $CI_REGISTRY_PASSWORD $CI_REGISTRY"
+    - ssh ubuntu@${HOST} -o StrictHostKeyChecking=no "docker stop $CI_PROJECT_NAME || true"
+    - ssh ubuntu@${HOST} -o StrictHostKeyChecking=no "docker rm $CI_PROJECT_NAME || true"
+    - ssh ubuntu@${HOST} -o StrictHostKeyChecking=no "docker pull $CI_REGISTRY_IMAGE"
+    - ssh ubuntu@${HOST} -o StrictHostKeyChecking=no "docker run -p 2222:22 -d --name $CI_PROJECT_NAME $CI_REGISTRY_IMAGE"
