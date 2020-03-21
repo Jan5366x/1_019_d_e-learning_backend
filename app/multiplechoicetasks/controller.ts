@@ -6,44 +6,42 @@ import Answer from './models/Answer';
 
 const Post: RequestHandler = (req: Request, res: Response, next: Function) => {
     const multipleChoiceTask = postMultipleChoiceTask(req.body, next);
-    res.send(multipleChoiceTask);
+    res.json(multipleChoiceTask);
 };
 
 const PostCollection: RequestHandler = (req: Request, res: Response, next: Function) => {
     let results: any[] = [];
-    if (req.body.length > 0) {
-        results = req.body.map((el: any) => postMultipleChoiceTask(el,next))
-    } else {
-        throw new BadRequestError('COLLECTION_REQUIRED', 'Collection is not allowed to be emty')
+    if (req.body.length === 0) {
+        next(new BadRequestError('COLLECTION_REQUIRED', 'Collection is not allowed to be emty'));
     }
-    res.send(results);
+    results = req.body.map((el: any) => postMultipleChoiceTask(el,next));
+    res.json(results);
 }
 
 const Get: RequestHandler = async (req: Request, res: Response, next: Function) => {
     const result = await MultipleChoiceTask.findById(req.params.id);
-    if (result != null) {
-        res.send(result);
-    } else {
-        next(new BadRequestError('TASK_REQUIRED', 'No MultipleChoiceTask found for ' + req.params.id));
+    if (result == null) {
+        throw new BadRequestError('COLLECTION_REQUIRED', 'Collection is not allowed to be emty')
     }
+    res.json(result);
 };
 
 const GetCollection: RequestHandler = async (req: Request, res: Response) => {
     const result = await MultipleChoiceTask.find();
-    res.send(result);
+    res.json(result);
 }
 
 const Put: RequestHandler = (req: Request, res: Response) => {
-    const multipleChoiceTask = getMultipleChoiceTask(req);
+    const multipleChoiceTask = getMultipleChoiceTask(req.body);
     multipleChoiceTask._id = undefined;
     MultipleChoiceTask.update({_id: req.params.id}, multipleChoiceTask).then(x => {
-        res.send();
+        res.json({ message: 'UPDATED'});
     });
 };
 
 const Delete: RequestHandler = (req: Request, res: Response) => {
     MultipleChoiceTask.deleteOne({_id: req.params.id}).then(() => {
-        res.send();
+        res.json({ mesage: 'DELETED' });
     });
 };
 
@@ -108,6 +106,7 @@ function getMultipleChoiceTask(body: any): any {
 }
 
 function getAnswers(answers: any): any[] {
+    console.log(answers);
     const resultAnswers: any = [];
     answers.forEach((answer: any) => {
         resultAnswers.push(new Answer({_id: new mongoose.Types.ObjectId(),title: answer.title, correct: answer.correct}))
