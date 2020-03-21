@@ -10,11 +10,9 @@ const Post: RequestHandler = (req: Request, res: Response, next: Function) => {
 };
 
 const PostCollection: RequestHandler = (req: Request, res: Response, next: Function) => {
-    const results: any[] = [];
+    let results: any[] = [];
     if (req.body.length > 0) {
-        req.body.forEach((element: any) => {
-            results.push(postMultipleChoiceTask(element, next));
-        });
+        results = req.body.map((el: any) => postMultipleChoiceTask(el,next))
     } else {
         throw new BadRequestError('COLLECTION_REQUIRED', 'Collection is not allowed to be emty')
     }
