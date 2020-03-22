@@ -7,4 +7,5 @@ export default ({
         database: "test"
     },
     jsonwebtoken: "xcvhojpüoizuxzcvbonpüpzxytzrczvubioixyterxv33467iouboiüucixuryxcvnmnbhgfgbinpcxyxrvzbunnbvtx6yxcvbnmiuzurzewaerdizuoztshdfgz0978s5dtb"
+    
 });

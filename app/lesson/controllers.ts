@@ -21,25 +21,27 @@ const ReadAll: RequestHandler = (req: Request, res: Response) => {
     // Save in MongoDB
     Lesson.find({}).exec(function(err: Error, docs: Document){
         console.log(docs);
-        res.status(200).json(docs);
+        res.status(200).json({meassage: "OK", docs:docs});
     });
 };
 
-const ReadById: RequestHandler = (req: Request, res: Response) => {
+const ReadById: RequestHandler = (req: Request, res: Response, next: Function) => {
     // Read all Lessons
     // Save in MongoDB
     Lesson.find({_id: req.params.id}).exec(function(err: Error, docs: Document){
         console.log(docs);
-        res.status(200).json(docs);
+        if(err) return next(new ExpressError("INTERNAL_ERROR_COULD_NOT_READ", err.message, 500)); 
+        res.status(200).json({meassage: "OK", docs:docs});
     });
 };
 
-const ReadByTitle: RequestHandler = (req: Request, res: Response) => {
+const ReadByTitle: RequestHandler = (req: Request, res: Response, next: Function) => {
     // Read all Lessons
     // Save in MongoDB
     Lesson.find({title: req.params.title}).exec(function(err: Error, docs: Document){
         console.log(docs);
-        res.status(200).json(docs);
+        if(err)  return next(new ExpressError("INTERNAL_ERROR_COULD_NOT_READ", err.message, 500)); 
+        res.status(200).json({meassage: "OK", docs: docs});
     });
 };
 
@@ -48,7 +50,7 @@ const Update: RequestHandler = (req: Request, res: Response, next: Function) => 
     // Save in MongoDB
     console.log(req.params.id + " ; " + req.body.title)
     var result = Lesson.updateOne({_id: req.params.id}, {title: req.body.title}).exec(function(err:Error){
-        return next(new ExpressError("COULD_NOT_UPDATE", ""+err, 400)); 
+        return next(new ExpressError("INTERNAL_ERROR_COULD_NOT_UPDATE", err.message, 500)); 
     });
 
     res.status(200).json({ message: "OK!" });
@@ -58,7 +60,7 @@ const Delete: RequestHandler = (req: Request, res: Response, next: Function) => 
     // Delete Lesson
     // Save in MongoDB
     Lesson.deleteOne({_id: req.params.id}, function(err){
-        return next(new ExpressError("COULD_NOT_UPDATE", ""+err, 400)); 
+        return next(new ExpressError("INTERNAL_ERROR_COULD_NOT_UPDATE", err.message, 500)); 
     }); 
     res.status(200).json({ message: "OK!" });
 };
