@@ -4,7 +4,6 @@ import ExpressError from "./classes/ExpressError";
 import express from 'express';
 
 //Express modules
-import UserManageRouter from "./user/routes"
 import DocumentFileRouter from "./documentFile/routes"
 import bodyParser from "body-parser";
 import morgan from "morgan";
