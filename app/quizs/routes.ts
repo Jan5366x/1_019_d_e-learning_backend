@@ -2,7 +2,7 @@ import express from 'express';
 
 import { Create, ReadAll, ReadById, UpdateById, DeleteById } from './controllers/quiz-controller';
 import { CreateQuestion, UpdateQuestion, DeleteQuestion, GetQuestion } from './controllers/question-controller';
-import { CreateAnswer } from './controllers/answer-controller';
+import { CreateAnswer, UpdateAnswerById, GetAnswerById, DeleteAnswerById } from './controllers/answer-controller';
 
 const router: express.Router = express.Router();
 
@@ -23,5 +23,8 @@ router.get('/:quizId/question/:questionId', GetQuestion);
 
 
 router.post('/:quizId/question/:questionId/answer', CreateAnswer);
+router.put('/:quizId/question/:questionId/answer/:answerId', UpdateAnswerById);
+router.get('/:quizId/question/:questionId/answer/:answerId', GetAnswerById);
+router.delete('/:quizId/question/:questionId/answer/:answerId', DeleteAnswerById);
 
 export default router;

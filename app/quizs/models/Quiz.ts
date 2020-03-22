@@ -25,7 +25,10 @@ export const QuizSchema = new mongoose.Schema({
         minlength: 3,
         maxlength: 5000
     },
-    questions: [QuestionSchema]
+    questions: [{
+        type: mongoose.Schema.Types.ObjectId, 
+        ref: 'Question'
+    }]
 });
 
 export default mongoose.model<IQuiz>('Quiz', QuizSchema);

@@ -2,6 +2,7 @@ import { RequestHandler, Request, Response } from "express";
 import Quiz, { IQuiz } from "../models/Quiz";
 import mongoose, { Document } from 'mongoose';
 import ExpressError from "../../classes/ExpressError";
+import Question from "../models/Question";
 
 const Create: RequestHandler = (req: Request, res: Response, next: Function) => {
     const quiz: IQuiz = new Quiz({
@@ -20,7 +21,7 @@ const Create: RequestHandler = (req: Request, res: Response, next: Function) => 
 };
 
 const ReadAll: RequestHandler = (req: Request, res: Response, next: Function) => {
-    Quiz.find({}).exec(function (err: Error, docs: Document) {
+    Quiz.find({}).populate('questions').populate('question.answers').exec(function (err: Error, docs: Document) {
         if (err) {
             return next(new ExpressError('INTERNAL_ERROR_COUD_NOT_READ'), err.message, 500);
         }
@@ -29,11 +30,16 @@ const ReadAll: RequestHandler = (req: Request, res: Response, next: Function) =>
 };
 
 const ReadById: RequestHandler = (req: Request, res: Response, next: Function) => {
-    Quiz.findById({ _id: req.params.id }).exec(function (err: Error, doc: Document) {
+    Quiz.findById({ _id: req.params.id }).populate('questions').exec(function (err: Error, quiz: IQuiz) {
         if (err) {
             return next(new ExpressError("INTERNAL_ERROR_COULD_NOT_READ", err.message, 500));
         }
-        res.status(200).json({ message: 'OK', doc: doc });
+        Question.populate(quiz.questions, { path: 'answers'}, function(err, doc) {
+            if (err) {
+                return next(new ExpressError("INTERNAL_ERROR_COULD_NOT_READ", err.message, 500));
+            }
+            res.status(200).json({ message: 'OK', doc: quiz });
+        })
     });
 };
 

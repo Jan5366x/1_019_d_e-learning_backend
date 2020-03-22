@@ -1,4 +1,4 @@
-import mongoose, { SchemaType, Document } from 'mongoose';
+import mongoose, { SchemaType, Document, Schema } from 'mongoose';
 import { AnswerSchema, IAnswer } from './Answer';
 
 export interface IQuestion extends Document {
@@ -24,7 +24,10 @@ export const QuestionSchema = new mongoose.Schema({
         maxlength: 5000
         
     },
-    answers: [AnswerSchema]
+    answers: [{
+        type: mongoose.Schema.Types.ObjectId, 
+        ref: 'Answer'
+    }]
 });
 
 export default mongoose.model<IQuestion>('Question', QuestionSchema);
