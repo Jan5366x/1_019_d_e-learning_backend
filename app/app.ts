@@ -1,12 +1,13 @@
 // lib/app.ts
 import express from 'express';
 import UserManageRouter from "./user/routes"
+import LessonRouter from "./lesson/routes"
 import bodyParser from "body-parser";
 import morgan from "morgan";
 import ExpressError from "./classes/ExpressError";
 import mongoose from "mongoose";
 import config from "./config";
-
+import pjson from "../package.json";
 
 // Create a new express application instance
 const app: express.Application = express();
@@ -21,6 +22,23 @@ app.use(morgan("dev", { skip: (req, res) => morganExcludedUrls.includes(req.orig
 app.use(bodyParser.urlencoded({ extended: false }));
 app.use(bodyParser.json());
 
+// Set Headers (CORS)
+
+app.set("x-powered-by", false);
+
+app.use((req, res, next) => {
+  res.header("Access-Control-Allow-Origin", "*");
+  res.header(
+    "Access-Control-Allow-Headers",
+    "Origin, X-Requested-With, Content-Type, Accept, Authorization"
+  );
+  if (req.method === "OPTIONS") {
+    res.header("Access-Control-Allow-Methods", "PUT, POST, PATCH, DELETE, GET");
+    res.status(200).json({});
+  }
+  next();
+});
+
 // MONGODB
 
 const mongoUserAuth: boolean = (config.mongodb.username != null && config.mongodb.password != null);
@@ -34,6 +52,7 @@ ${config.mongodb.port || 27017}/${config.mongodb.database}`, { useNewUrlParser: 
 // ROUTES
 
 app.use("/user", UserManageRouter);
+app.use("/lesson", LessonRouter);
 
 // 404
 
