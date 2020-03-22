@@ -30,9 +30,9 @@ const ReadAll: RequestHandler = (req: Request, res: Response, next: Function) =>
 };
 
 const ReadById: RequestHandler = (req: Request, res: Response, next: Function) => {
-    Quiz.findById({ _id: req.params.id }).populate("questions").exec(function (err: Error, quiz: IQuiz) {
-        if (err) {
-            return next(new ExpressError("INTERNAL_ERROR_COULD_NOT_READ", err.message, 500));
+    Quiz.findById(req.params.id).exec(function (err: Error, quiz: IQuiz) {
+        if (err || quiz == null) {
+            return next(new ExpressError("INTERNAL_ERROR_COULD_NOT_READ", err?.message, 500));
         }
         Question.populate(quiz.questions, { path: "answers"}, function(err, doc) {
             if (err) {
