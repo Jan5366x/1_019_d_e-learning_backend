@@ -64,7 +64,7 @@ const GetFile: RequestHandler = (req: Request, res: Response, next: Function) =>
         Key: `${awsKey}`
     };
     console.log(bucketName);
-    s3.getObject(params, (err, data) => {
+    s3.getObject(params, (err : any, data: any) => {
         if (err) return next(new ExpressError("FILE_NOT_READABLE", "File could not be read.", 400));
         console.log(data);
         writeFileSync(data.filename, data.Body.toString());
@@ -84,7 +84,7 @@ const DeleteFile: RequestHandler = (req: Request, res: Response, next: Function)
         Bucket: `${bucketName}`,
         Key: `${key}`
     };
-    const stream = s3.deleteObject(params, function (err, data) {
+    const stream = s3.deleteObject(params, function (err : any, data : any) {
         if (err) {
             return next(new ExpressError(err.message, "File could not be deleted", 400));
         } else {
