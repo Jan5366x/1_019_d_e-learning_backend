@@ -62,7 +62,6 @@ const Login: RequestHandler = async (req: Request, res: Response, next: Function
             role: user!!.get("role"),
             firstname: user!!.get("firstname") == "" ? null : user!!.get("firstname"),
             name: user!!.get("name") == "" ? null : user!!.get("name"),
-            avatar: user!!.get("avatar") != null ? user!!.get("avatar") : avatarTemplates.getTemplate("BlankTemplate")
         }, config.jsonwebtoken, { expiresIn: 3700 }),
         user: {
             email: user!!.get("email"),
@@ -70,7 +69,8 @@ const Login: RequestHandler = async (req: Request, res: Response, next: Function
             permissions: user!!.get("permissions"),
             role: user!!.get("role"),
             firstname: user!!.get("firstname") == "" ? null : user!!.get("firstname"),
-            name: user!!.get("name") == "" ? null : user!!.get("name")
+            name: user!!.get("name") == "" ? null : user!!.get("name"),
+            avatar: user!!.get("avatar") != null ? user!!.get("avatar") : avatarTemplates.getTemplate("BlankTemplate")
         },
         requests: []
     })
@@ -151,7 +151,8 @@ const Signup: RequestHandler = async (req: Request, res: Response, next: Functio
             permissions: [],
             role: null,
             firstname: req.body.firstname == "" ? null : req.body.firstname,
-            name: req.body.name == "" ? null : req.body.name
+            name: req.body.name == "" ? null : req.body.name,
+            avatar: avatar
         },
         token: jsonwebtoken.sign({
             email: req.body.email,
