@@ -8,7 +8,8 @@ const Create: RequestHandler = (req: Request, res: Response, next: Function) => 
 
     var lesson = new Lesson({
         _id: new mongoose.Types.ObjectId(),
-        title: req.body.title
+        title: req.body.title,
+        date: req.body.date
     });
 
     console.log(lesson);
@@ -48,12 +49,34 @@ const ReadByTitle: RequestHandler = (req: Request, res: Response, next: Function
     });
 };
 
+const ReadByDate: RequestHandler = (req: Request, res: Response, next: Function) => {
+    // Read all Lessons
+    // Save in MongoDB
+    Lesson.find({ date: req.params.date }).exec(function (err: Error, docs: Document) {
+        if (err) return next(new ExpressError("INTERNAL_ERROR_COULD_NOT_READ", err.message, 500));
+        res.status(200).json({ meassage: "OK", docs: docs });
+    });
+};
+
+const ReadByDateStartEnd: RequestHandler = (req: Request, res: Response, next: Function) => {
+    // Read all Lessons
+    // Save in MongoDB
+    Lesson.find({date: {
+        $gte: req.params.startDate,
+        $lte: req.params.endDate
+    }}).exec(function (err: Error, docs: Document) {
+        if (err) return next(new ExpressError("INTERNAL_ERROR_COULD_NOT_READ", err.message, 500));
+        console.log(docs)
+        res.status(200).json({ meassage: "OK", docs: docs });
+    });
+};
+
 const Update: RequestHandler = (req: Request, res: Response, next: Function) => {
     // Update Lesson
     // Save in MongoDB
     console.log(req.params.id + " ; " + req.body.title)
-    var result = Lesson.updateOne({ _id: req.params.id }, { title: req.body.title }).exec(function (err: Error) {
-        return next(new ExpressError("INTERNAL_ERROR_COULD_NOT_UPDATE", err.message, 500));
+    var result = Lesson.updateOne({_id: req.params.id}, {title: req.body.title, date: req.body.date}).exec(function(err:Error){
+        if(err) return next(new ExpressError("INTERNAL_ERROR_COULD_NOT_UPDATE", err.message, 500)); 
     });
 
     res.status(200).json({ message: "OK" });
@@ -62,10 +85,10 @@ const Update: RequestHandler = (req: Request, res: Response, next: Function) => 
 const Delete: RequestHandler = (req: Request, res: Response, next: Function) => {
     // Delete Lesson
     // Save in MongoDB
-    Lesson.deleteOne({ _id: req.params.id }, function (err) {
-        return next(new ExpressError("INTERNAL_ERROR_COULD_NOT_UPDATE", err.message, 500));
-    });
+    Lesson.deleteOne({_id: req.params.id}, function(err){
+        if(err) return next(new ExpressError("INTERNAL_ERROR_COULD_NOT_UPDATE", err.message, 500)); 
+    }); 
     res.status(200).json({ message: "OK" });
 };
 
-export { Create, ReadAll, ReadById, ReadByTitle, Update, Delete };
+export { Create, ReadAll, ReadById, ReadByTitle, ReadByDate, ReadByDateStartEnd, Update, Delete };

@@ -3,9 +3,7 @@ import {
     Create as CreateController,
     ReadAll as ReadAllController,
     ReadById as ReadByIdController,
-    ReadByTitle as ReadByTitleController,
-    ReadByDate as ReadByDateController,
-    ReadByDateStartEnd as ReadByDateStartEndController,
+    ReadByName as ReadByNameController,
     Update as UpdateController,
     Delete as DeleteController
 } from "./controllers";
@@ -15,9 +13,7 @@ const router: express.Router = express.Router();
 //GET ROUTES
 router.get("/", ReadAllController);
 router.get("/oneById/:id", ReadByIdController);
-router.get("/oneByTitle/:title", ReadByTitleController);
-router.get("/oneByDate/:date", ReadByDateController)
-router.get("/byStartAndEnd/:startDate/:endDate", ReadByDateStartEndController)
+router.get("/oneByName/:name", ReadByNameController);
 
 //POST ROUTES
 router.post("/create", CreateController);
@@ -28,4 +24,4 @@ router.put("/:id", UpdateController);
 //DELETE ROUTES
 router.delete("/:id", DeleteController);
 
-export default router;
+export default router; 

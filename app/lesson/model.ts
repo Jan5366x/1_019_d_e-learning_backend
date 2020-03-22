@@ -9,6 +9,9 @@ const LessonSchema = new mongoose.Schema({
         minlength: 3,
         maxlength: 255
     },
+    date:{
+        type: Date
+    }
     //steps: [Step]
 });
 
