@@ -2,7 +2,7 @@ import { RequestHandler, Request, Response } from "express";
 import mongoose, { Query } from "mongoose";
 import Lesson from "./model"
 import ExpressError from "../classes/ExpressError";
-const Create: RequestHandler = (req: Request, res: Response) => {
+const Create: RequestHandler = (req: Request, res: Response, next: Function) => {
     // Create new Lesson
     // Save in MongoDB
     
@@ -12,15 +12,18 @@ const Create: RequestHandler = (req: Request, res: Response) => {
     }); 
 
     console.log(lesson); 
-    lesson.save();
+    lesson.save(function(err){
+        if(err) return next(new ExpressError("INTERNAL_ERROR_COULD_NOT_CREATE", err.message, 500)); 
+    });
     res.status(200).json({ message: "OK!" });
 };
 
-const ReadAll: RequestHandler = (req: Request, res: Response) => {
+const ReadAll: RequestHandler = (req: Request, res: Response, next: Function) => {
     // Read all Lessons
     // Save in MongoDB
     Lesson.find({}).exec(function(err: Error, docs: Document){
         console.log(docs);
+        if(err) return next(new ExpressError("INTERNAL_ERROR_COULD_NOT_READ", err.message, 500)); 
         res.status(200).json({meassage: "OK", docs:docs});
     });
 };
