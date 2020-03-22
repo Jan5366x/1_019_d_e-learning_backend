@@ -4,6 +4,7 @@ import {
     ReadAll as ReadAllController,
     ReadById as ReadByIdController,
     ReadByTitle as ReadByTitleController,
+    ReadByDate as ReadByDateController,
     Update as UpdateController,
     Delete as DeleteController
 } from "./controllers";
@@ -14,7 +15,7 @@ const router: express.Router = express.Router();
 router.get("/", ReadAllController);
 router.get("/oneById/:id", ReadByIdController);
 router.get("/oneByTitle/:title", ReadByTitleController);
-
+router.get("/oneByDate/:date", ReadByDateController)
 //POST ROUTES
 router.post("/create", CreateController);
 
