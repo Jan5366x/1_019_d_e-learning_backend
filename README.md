@@ -24,7 +24,7 @@ Nur builden (output-dir /build)
 ```bash
 npm run tsc
 // und dann starten mit
-node build/app.js
+npm start-builded
 ```
 
 
