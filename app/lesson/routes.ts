@@ -28,7 +28,9 @@ import {
     GetAll as PlannedGetAllController,
     GetBetween as PlannedGetBetweenController,
     GetById as PlannedGetByIDController,
-    Create as PlannedCreateController
+    Create as PlannedCreateController,
+    Update as PlannedUpdateController,
+    Delete as PlannedDeleteController
 } from "./plannedLessonController"
 
 const plannedRouter = express.Router();
@@ -42,4 +44,11 @@ plannedRouter.get("/:_id", PlannedGetByIDController)
 
 // POST ROUTES
 plannedRouter.post("/", PlannedCreateController)
+
+// PUT ROUTES
+plannedRouter.put("/:_id", PlannedUpdateController)
+
+//DELETE ROUTES
+plannedRouter.delete("/:_id", PlannedDeleteController)
+
 export default router;

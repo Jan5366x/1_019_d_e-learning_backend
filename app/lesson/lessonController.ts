@@ -5,6 +5,7 @@ import ExpressError from "../classes/ExpressError";
 const Create: RequestHandler = (req: Request, res: Response, next: Function) => {
     // Create new Lesson
     // Save in MongoDB
+    if (req.body.title == null) return next(new ExpressError("TITLE_REQUIRED", "You have to provide a title", 400))
 
     var lesson = new LessonM({
         _id: new mongoose.Types.ObjectId(),
@@ -73,10 +74,7 @@ const ReadByTitle: RequestHandler = (req: Request, res: Response, next: Function
 // };
 
 const Update: RequestHandler = (req: Request, res: Response, next: Function) => {
-    // Update Lesson
-    // Save in MongoDB
-    console.log(req.params.id + " ; " + req.body.title)
-    var result = LessonM.updateOne({ _id: req.params.id }, { title: req.body.title }).exec(function (err: Error) {
+    LessonM.updateOne({ _id: req.params.id }, { title: req.body.title }).exec(function (err: Error) {
         if (err) return next(new ExpressError("INTERNAL_ERROR_COULD_NOT_UPDATE", err.message, 500));
     });
 
