@@ -1,3 +1,7 @@
 import BlankTemplate from "./blankTemplate.json";
 
-export { BlankTemplate }
+export default class AvatarTemplates {
+    public static templates: { [key: string]: Object } = { "BlankTemplate": BlankTemplate }
+
+    public static getTemplate(id: string): Object { return this.templates[id]; }
+}
