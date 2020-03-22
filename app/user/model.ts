@@ -1,4 +1,5 @@
 import mongoose from "mongoose";
+
 const UserSchema = new mongoose.Schema({
     _id: { type: mongoose.Schema.Types.ObjectId, required: true },
     username: {
@@ -29,6 +30,10 @@ const UserSchema = new mongoose.Schema({
         required: true,
         minlength: 6,
         maxlength: 255
+    },
+    avatar: {
+        type: Object,
+        required: true
     },
     permissions: [
         { type: String }
