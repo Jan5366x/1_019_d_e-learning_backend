@@ -1,0 +1,7 @@
+{
+    "inputFiles": [
+        "./app"
+    ],
+    "mode": "modules",
+    "out": "typedoc"
+}

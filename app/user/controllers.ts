@@ -11,11 +11,19 @@ import avatarTemplates from "../avatarTemplate/templates/all";
 
 const emailRegex: RegExp = /(?:[a-z0-9!#$%&'*+/=?^_`{|}~-]+(?:\.[a-z0-9!#$%&'*+/=?^_`{|}~-]+)*|"(?:[\x01-\x08\x0b\x0c\x0e-\x1f\x21\x23-\x5b\x5d-\x7f]|\\[\x01-\x09\x0b\x0c\x0e-\x7f])*")@(?:(?:[a-z0-9](?:[a-z0-9-]*[a-z0-9])?\.)+[a-z0-9](?:[a-z0-9-]*[a-z0-9])?|\[(?:(?:(2(5[0-5]|[0-4][0-9])|1[0-9][0-9]|[1-9]?[0-9]))\.){3}(?:(2(5[0-5]|[0-4][0-9])|1[0-9][0-9]|[1-9]?[0-9])|[a-z0-9-]*[a-z0-9]:(?:[\x01-\x08\x0b\x0c\x0e-\x1f\x21-\x5a\x53-\x7f]|\\[\x01-\x09\x0b\x0c\x0e-\x7f])+)\])/;
 
+
+/**
+ * #Route /user/login
+ * 
+ * ##StatusCodes
+ * ###500
+ * - INTERNAL_ERROR_GETTING_USER
+ */
 const Login: RequestHandler = async (req: Request, res: Response, next: Function) => {
     if (req.body.password == null) return next(new ExpressError("PASSWORD_REQUIRED", "You have to provide a password.", 400));
     if (req.body.username == null && req.body.email == null) return next(new ExpressError("USERNAME_OR_EMAIL_REQUIRED", "You have to provide either a username or an email address.", 400));
-    
-    
+
+
     if (!emailRegex.test(req.body.email)) return next(new ExpressError("EMAIL_FORMAT_ERROR", "You have provided an inavlid email address.", 400));
     if (checkString.max(req.body.email, 255)) return next(new ExpressError("EMAIL_TOO_LONG", "You have to provide an email address with a maximum length of 255 chars.", 400));
 
@@ -82,7 +90,7 @@ const Signup: RequestHandler = async (req: Request, res: Response, next: Functio
     if (req.body.username == null) return next(new ExpressError("USERNAME_REQUIRED", "You have to provide a username.", 400));
     if (req.body.password == null) return next(new ExpressError("PASSWORD_REQUIRED", "You have to provide a password.", 400));
     if (req.body.role == null) return next(new ExpressError("ROLE_REQUIRED", "You have to provide a role.", 400));
-    
+
     if (!emailRegex.test(req.body.email)) return next(new ExpressError("EMAIL_FORMAT_ERROR", "You have provided an inavlid email address.", 400));
     if (checkString.max(req.body.email, 255)) return next(new ExpressError("EMAIL_TOO_LONG", "You have to provide an email address with a maximum length of 255 chars.", 400));
 
@@ -202,9 +210,9 @@ const Role: RequestHandler = (req: Request, res: Response) => {
 }
 
 const Roles: RequestHandler = (req: Request, res: Response, next: Function) => {
-    
-    RoleM.find({}).exec(function(err, roles){
-        if(err) return next(new ExpressError("INTERNAL_ERROR_COULD_NOT_READ_ROLES"), err.message)
+
+    RoleM.find({}).exec(function (err, roles) {
+        if (err) return next(new ExpressError("INTERNAL_ERROR_COULD_NOT_READ_ROLES"), err.message)
         res.status(200).json({ message: "OK", docs: roles });
     });
 }
