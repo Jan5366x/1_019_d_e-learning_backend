@@ -1,4 +1,4 @@
-import mongoose, { SchemaType, Document } from 'mongoose';
+import mongoose, { SchemaType, Document } from "mongoose";
 
 export interface IAnswer extends Document {
     _id: SchemaType;
@@ -23,4 +23,4 @@ export const AnswerSchema = new mongoose.Schema({
     }
 });
 
-export default mongoose.model<IAnswer>('Answer', AnswerSchema);
+export default mongoose.model<IAnswer>("Answer", AnswerSchema);

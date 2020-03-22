@@ -1,8 +1,8 @@
 import { RequestHandler, Request, Response } from "express";
 import Question, { IQuestion } from "../models/Question";
-import mongoose, { Types } from "mongoose";
+import mongoose from "mongoose";
 import ExpressError from "../../classes/ExpressError";
-import Quiz, { IQuiz } from "../models/Quiz";
+import Quiz from "../models/Quiz";
 
 const CreateQuestion: RequestHandler = (req: Request, res: Response, next: Function) => {
     const question: IQuestion = new Question({
@@ -12,16 +12,16 @@ const CreateQuestion: RequestHandler = (req: Request, res: Response, next: Funct
     });
     question.save(function(err) {
         if (err) {
-            return next(new ExpressError('INTERNAL_ERROR_COULD_NOT_CREATED', err.message, 500));
+            return next(new ExpressError("INTERNAL_ERROR_COULD_NOT_CREATED", err.message, 500));
         }
         Quiz.update(
             { _id: req.params.quizId },
             { $push: { questions: question._id } }
         ).exec(function (err: Error) {
             if (err) {
-                return next(new ExpressError('INTERNAL_ERROR_COULD_NOT_UPDATE', err.message, 500));
+                return next(new ExpressError("INTERNAL_ERROR_COULD_NOT_UPDATE", err.message, 500));
             }
-            res.status(200).json({ message: 'OK', doc: question });
+            res.status(200).json({ message: "OK", doc: question });
         });
     })
 }
@@ -32,18 +32,18 @@ const UpdateQuestion: RequestHandler = (req: Request, res: Response, next: Funct
         { type: req.body.type, question: req.body.question }
     ).exec(function (err: Error) {
         if (err) {
-            return next(new ExpressError('INTERNAL_ERROR_COULD_NOT_UPDATE', err.message, 500));
+            return next(new ExpressError("INTERNAL_ERROR_COULD_NOT_UPDATE", err.message, 500));
         }
-        res.status(200).json({ message: 'OK' })
+        res.status(200).json({ message: "OK" })
     });
 };
 
 const GetQuestion: RequestHandler = (req: Request, res: Response, next: Function) => {
-    Question.findById(req.params.questionId).populate('answers').exec(function(error: Error, doc: IQuestion) {
+    Question.findById(req.params.questionId).populate("answers").exec(function(error: Error, doc: IQuestion) {
         if (error) {
-            return next(new ExpressError('INTERNAL_ERROR_COULD_NOT_READ', error.message, 500));
+            return next(new ExpressError("INTERNAL_ERROR_COULD_NOT_READ", error.message, 500));
         }
-        res.status(200).json({ message: 'OK', doc: doc });
+        res.status(200).json({ message: "OK", doc: doc });
     });
 }
 
@@ -52,7 +52,7 @@ const DeleteQuestion: RequestHandler = (req: Request, res: Response, next: Funct
         if (err) {
             return next(new ExpressError("INTERNAL_ERROR_COULD_NOT_DELETE", err.message, 500));
         }
-        res.status(200).json({ message: 'OK' });
+        res.status(200).json({ message: "OK" });
     });
 };
 

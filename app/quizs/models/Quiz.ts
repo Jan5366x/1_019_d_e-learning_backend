@@ -1,5 +1,5 @@
-import mongoose, { Document, SchemaType } from 'mongoose';
-import { QuestionSchema, IQuestion } from './Question';
+import mongoose, { Document, SchemaType } from "mongoose";
+import { IQuestion } from "./Question";
 
 export interface IQuiz extends Document {
     _id: mongoose.Schema.Types.ObjectId;
@@ -27,8 +27,8 @@ export const QuizSchema = new mongoose.Schema({
     },
     questions: [{
         type: mongoose.Schema.Types.ObjectId, 
-        ref: 'Question'
+        ref: "Question"
     }]
 });
 
-export default mongoose.model<IQuiz>('Quiz', QuizSchema);
+export default mongoose.model<IQuiz>("Quiz", QuizSchema);
