@@ -7,7 +7,8 @@ import bodyParser from "body-parser";
 import morgan from "morgan";
 import ExpressError from "./classes/ExpressError";
 import mongoose from "mongoose";
-import config from "./config";
+import config from "../config";
+import pjson from "../package.json";
 
 // Create a new express application instance
 const app: express.Application = express();
@@ -55,31 +56,35 @@ app.use("/user", UserManageRouter);
 app.use("/course", CourseRouter);
 app.use("/lesson", LessonRouter);
 
+// STATIC
+
+app.get("/version", (req, res) => { res.status(200).json({ message: "OK", version: pjson.version }) });
+
 // 404
 
 app.use((req, res, next) => {
-    next(new ExpressError("PAGE_NOT_FOUND", "Sorry, we could't find the page you've requested!", 404));
+  next(new ExpressError("PAGE_NOT_FOUND", "Sorry, we could't find the page you've requested!", 404));
 });
 
 
 // Error handling
 
 app.use((error: ExpressError, req: express.Request, res: express.Response, next: Function) => {
-    if (error.needAuth)
-        res.header("WWW-Authenticate",
-            'Basic realm="Log in/Get token for the application", charset="UTF-8"')
-    res.status(error.status || 500);
-    res.json({
-        message: error.message,
-        err: error.humanReadableError,
-        error: true
-    });
+  if (error.needAuth)
+    res.header("WWW-Authenticate",
+      'Basic realm="Log in/Get token for the application", charset="UTF-8"')
+  res.status(error.status || 500);
+  res.json({
+    message: error.message,
+    err: error.humanReadableError,
+    error: true
+  });
 
-    if (error.message.includes("INTERNAL_ERROR")) console.error(error);
+  if (error.message.includes("INTERNAL_ERROR")) console.error(error);
 });
 
 // Start Server
 
 app.listen(3000, function () {
-    console.log('Example app listening on port 3000!');
+  console.log('Example app listening on port 3000!');
 });
