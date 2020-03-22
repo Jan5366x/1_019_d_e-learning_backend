@@ -14,7 +14,7 @@ const emailRegex: RegExp = /(?:[a-z0-9!#$%&'*+/=?^_`{|}~-]+(?:\.[a-z0-9!#$%&'*+/
 const Login: RequestHandler = async (req: Request, res: Response, next: Function) => {
     if (req.body.password == null) return next(new ExpressError("PASSWORD_REQUIRED", "You have to provide a password.", 400));
     if (req.body.username == null && req.body.email == null) return next(new ExpressError("USERNAME_OR_EMAIL_REQUIRED", "You have to provide either a username or an email address.", 400));
-    if (req.body.role == null) return next(new ExpressError("ROLE_REQUIRED", "You have to provide a role.", 400));
+    
     
     if (!emailRegex.test(req.body.email)) return next(new ExpressError("EMAIL_FORMAT_ERROR", "You have provided an inavlid email address.", 400));
     if (checkString.max(req.body.email, 255)) return next(new ExpressError("EMAIL_TOO_LONG", "You have to provide an email address with a maximum length of 255 chars.", 400));
@@ -81,7 +81,8 @@ const Signup: RequestHandler = async (req: Request, res: Response, next: Functio
     if (req.body.email == null) return next(new ExpressError("EMAIL_REQUIRED", "You have to provide an email address.", 400));
     if (req.body.username == null) return next(new ExpressError("USERNAME_REQUIRED", "You have to provide a username.", 400));
     if (req.body.password == null) return next(new ExpressError("PASSWORD_REQUIRED", "You have to provide a password.", 400));
-
+    if (req.body.role == null) return next(new ExpressError("ROLE_REQUIRED", "You have to provide a role.", 400));
+    
     if (!emailRegex.test(req.body.email)) return next(new ExpressError("EMAIL_FORMAT_ERROR", "You have provided an inavlid email address.", 400));
     if (checkString.max(req.body.email, 255)) return next(new ExpressError("EMAIL_TOO_LONG", "You have to provide an email address with a maximum length of 255 chars.", 400));
 
