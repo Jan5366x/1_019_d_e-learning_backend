@@ -111,5 +111,5 @@ deploy:
     - ssh ubuntu@${HOST} -o StrictHostKeyChecking=no "docker run -p 3000:3000 -d --name $CI_PROJECT_NAME $CI_REGISTRY_IMAGE:$TAG"
     - ssh ubuntu@${HOST} -o StrictHostKeyChecking=no "docker inspect -f '{{.State.Running}}' $CI_PROJECT_NAME"
     # Check if service is up
-    - curl -m 1 --request GET ${HOST}:3000/version | jq
+    - curl -m 1 --request GET ${HOST}:3000/version | jq .
   when: manual
