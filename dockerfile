@@ -1,13 +1,10 @@
-FROM debian:buster-slim
+FROM node:latest
 
+WORKDIR /app/
 
-RUN apt-get update -qq \
-    && DEBIAN_FRONTEND=noninteractive \
-    apt-get install --assume-yes --no-install-recommends \
-    locales ca-certificates openssh-server \
-    && apt-get clean \
-    && rm -rf /var/lib/apt/lists/* /tmp/* /var/tmp/*
+ADD build/          /app/build/
+ADD node_modules/   /app/node_modules/
 
 # Just for testing puroses...
-EXPOSE 22
-CMD ["/usr/sbin/sshd", "-D"]
+EXPOSE 3000
+CMD ["node", "/app/build/app/app.js"]
