@@ -19,6 +19,7 @@ import LessonRouter from "./lesson/routes"
 import AvatarTemplatesRouter from './avatarTemplate/routes';
 import QuizRouter from './quizs/routes';
 import StudentClassRouter from "./studentClass/routes";
+import StepRouter from "./step/routes";
 
 // Create a new express application instance
 const app: express.Application = express();
@@ -68,7 +69,7 @@ app.use("/course", CourseRouter);
 app.use("/lesson", LessonRouter);
 app.use("/student-class", StudentClassRouter);
 app.use("/avatartemplates", AvatarTemplatesRouter)
-
+app.use("/step", StepRouter);
 // STATIC
 
 app.get("/version", (req, res) => { res.status(200).json({ message: "OK", version: pjson.version }) });
