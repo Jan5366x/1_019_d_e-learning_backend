@@ -61,7 +61,8 @@ const Login: RequestHandler = async (req: Request, res: Response, next: Function
             permissions: user!!.get("permissions"),
             role: user!!.get("role"),
             firstname: user!!.get("firstname") == "" ? null : user!!.get("firstname"),
-            name: user!!.get("name") == "" ? null : user!!.get("name")
+            name: user!!.get("name") == "" ? null : user!!.get("name"),
+            avatar: user!!.get("avatar") != null ? user!!.get("avatar") : avatarTemplates.getTemplate("BlankTemplate")
         }, config.jsonwebtoken, { expiresIn: 3700 }),
         user: {
             email: user!!.get("email"),
