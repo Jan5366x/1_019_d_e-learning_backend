@@ -23,6 +23,10 @@ import StudentClassRouter from "./studentClass/routes";
 // Create a new express application instance
 const app: express.Application = express();
 
+//Startup Script
+import StartUp from "./init"
+
+
 // Logging
 
 const morganExcludedUrls: Array<String> = [];
@@ -59,6 +63,8 @@ ${!mongoUserAuth ? "" : ":"}\
 ${!mongoUserAuth ? "" : config.mongodb.password}\
 ${!mongoUserAuth ? "" : "@"}${config.mongodb.domain || "localhost"}:\
 ${config.mongodb.port || 27017}/${config.mongodb.database}`, { useNewUrlParser: true, useUnifiedTopology: true });
+StartUp.checkDB()
+
 
 // ROUTES
 

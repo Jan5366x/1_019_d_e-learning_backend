@@ -149,7 +149,7 @@ const Signup: RequestHandler = async (req: Request, res: Response, next: Functio
             _id: createdUser._id,
             username: req.body.username,
             permissions: [],
-            role: null,
+            role: req.body.role,
             firstname: req.body.firstname == "" ? null : req.body.firstname,
             name: req.body.name == "" ? null : req.body.name,
             avatar: avatar
@@ -159,7 +159,7 @@ const Signup: RequestHandler = async (req: Request, res: Response, next: Functio
             _id: createdUser._id,
             username: req.body.username,
             permissions: [],
-            role: null,
+            role: req.body.role,
             firstname: req.body.firstname == "" ? null : req.body.firstname,
             name: req.body.name == "" ? null : req.body.name
 
@@ -198,4 +198,12 @@ const Role: RequestHandler = (req: Request, res: Response) => {
 
 }
 
-export { Login, Signup, Logout, Revoke, Grant, Permissions, Role };
+const Roles: RequestHandler = (req: Request, res: Response, next: Function) => {
+    
+    RoleM.find({}).exec(function(err, roles){
+        if(err) return next(new ExpressError("INTERNAL_ERROR_COULD_NOT_READ_ROLES"), err.message)
+        res.status(200).json({ message: "OK", docs: roles });
+    });
+}
+
+export { Login, Signup, Logout, Revoke, Grant, Permissions, Role, Roles };
