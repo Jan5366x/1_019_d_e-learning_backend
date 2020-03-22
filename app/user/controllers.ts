@@ -73,6 +73,7 @@ const Signup: RequestHandler = async (req: Request, res: Response, next: Functio
     if (req.body.email == null) return next(new ExpressError("EMAIL_REQUIRED", "You have to provide an email address.", 400));
     if (req.body.username == null) return next(new ExpressError("USERNAME_REQUIRED", "You have to provide a username.", 400));
     if (req.body.password == null) return next(new ExpressError("PASSWORD_REQUIRED", "You have to provide a password.", 400));
+    if (req.body.avatar == null && req.body.avatartemplate == null) return next(new ExpressError("AVATAR_OR_AVATARTEMPLATE_REQUIRED"))
 
     if (!emailRegex.test(req.body.email)) return next(new ExpressError("EMAIL_FORMAT_ERROR", "You have provided an inavlid email address.", 400));
     if (checkString.max(req.body.email, 255)) return next(new ExpressError("EMAIL_TOO_LONG", "You have to provide an email address with a maximum length of 255 chars.", 400));

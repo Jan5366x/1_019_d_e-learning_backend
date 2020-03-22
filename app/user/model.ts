@@ -30,6 +30,10 @@ const UserSchema = new mongoose.Schema({
         minlength: 6,
         maxlength: 255
     },
+    avatar: {
+        type: Buffer,
+        required: true
+    },
     permissions: [
         { type: String }
     ],
