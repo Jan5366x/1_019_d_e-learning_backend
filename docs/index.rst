@@ -34,19 +34,25 @@ Please edit config.ts to contain your MongoDB configuration
 Test server
 -----------
 To test the server, execute
-.. code::bash
+
+.. code:: bash
+
    npm test
 
 Run build
 ---------
 To start a build, execute
-.. code::bash
+
+.. code:: bash
+
    npm run tsc
 
 Start builded code
 ------------------
 To start the builded code, run
-.. code::bash
+
+.. code:: bash
+
    npm run start-builded
 
 Login api
