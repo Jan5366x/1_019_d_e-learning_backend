@@ -31,6 +31,10 @@ const UserSchema = new mongoose.Schema({
         minlength: 6,
         maxlength: 255
     },
+    avatar: {
+        type: Object,
+        required: true
+    },
     permissions: [
         { type: String }
     ],

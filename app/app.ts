@@ -1,14 +1,22 @@
 // lib/app.ts
+import ExpressError from "./classes/ExpressError";
+
 import express from 'express';
+
+//Express modules
+import bodyParser from "body-parser";
+import morgan from "morgan";
+import mongoose from "mongoose";
+
+// Configs
+import config from "../config";
+import pjson from "../package.json";
+
+//Routers
 import UserManageRouter from "./user/routes"
 import CourseRouter from "./course/routes"
 import LessonRouter from "./lesson/routes"
-import bodyParser from "body-parser";
-import morgan from "morgan";
-import ExpressError from "./classes/ExpressError";
-import mongoose from "mongoose";
-import config from "../config";
-import pjson from "../package.json";
+import AvatarTemplatesRouter from './avatarTemplate/routes';
 
 // Create a new express application instance
 const app: express.Application = express();
@@ -55,6 +63,7 @@ ${config.mongodb.port || 27017}/${config.mongodb.database}`, { useNewUrlParser: 
 app.use("/user", UserManageRouter);
 app.use("/course", CourseRouter);
 app.use("/lesson", LessonRouter);
+app.use("/avatartemplates", AvatarTemplatesRouter)
 
 // STATIC
 
