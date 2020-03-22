@@ -1,5 +1,4 @@
 import mongoose from "mongoose";
-import Lesson from "../lesson/model"; 
 
 
 const CourseSchema = new mongoose.Schema({
@@ -11,7 +10,7 @@ const CourseSchema = new mongoose.Schema({
         maxlength: 255
     },
     Lessons: [{
-        type: mongoose.Schema.Types.ObjectId, 
+        type: mongoose.Schema.Types.ObjectId,
         ref: "Lesson"
     }]
     // student:[{
