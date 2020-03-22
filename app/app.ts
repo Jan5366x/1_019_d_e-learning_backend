@@ -17,6 +17,7 @@ import UserManageRouter from "./user/routes"
 import CourseRouter from "./course/routes"
 import LessonRouter from "./lesson/routes"
 import AvatarTemplatesRouter from './avatarTemplate/routes';
+import QuizRouter from './quizs/routes';
 import StudentClassRouter from "./studentClass/routes";
 
 // Create a new express application instance
@@ -62,6 +63,7 @@ ${config.mongodb.port || 27017}/${config.mongodb.database}`, { useNewUrlParser: 
 // ROUTES
 
 app.use("/user", UserManageRouter);
+app.use("/quiz", QuizRouter);
 app.use("/course", CourseRouter);
 app.use("/lesson", LessonRouter);
 app.use("/student-class", StudentClassRouter);
