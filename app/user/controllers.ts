@@ -14,7 +14,8 @@ const emailRegex: RegExp = /(?:[a-z0-9!#$%&'*+/=?^_`{|}~-]+(?:\.[a-z0-9!#$%&'*+/
 const Login: RequestHandler = async (req: Request, res: Response, next: Function) => {
     if (req.body.password == null) return next(new ExpressError("PASSWORD_REQUIRED", "You have to provide a password.", 400));
     if (req.body.username == null && req.body.email == null) return next(new ExpressError("USERNAME_OR_EMAIL_REQUIRED", "You have to provide either a username or an email address.", 400));
-
+    
+    
     if (!emailRegex.test(req.body.email)) return next(new ExpressError("EMAIL_FORMAT_ERROR", "You have provided an inavlid email address.", 400));
     if (checkString.max(req.body.email, 255)) return next(new ExpressError("EMAIL_TOO_LONG", "You have to provide an email address with a maximum length of 255 chars.", 400));
 
@@ -80,7 +81,8 @@ const Signup: RequestHandler = async (req: Request, res: Response, next: Functio
     if (req.body.email == null) return next(new ExpressError("EMAIL_REQUIRED", "You have to provide an email address.", 400));
     if (req.body.username == null) return next(new ExpressError("USERNAME_REQUIRED", "You have to provide a username.", 400));
     if (req.body.password == null) return next(new ExpressError("PASSWORD_REQUIRED", "You have to provide a password.", 400));
-
+    if (req.body.role == null) return next(new ExpressError("ROLE_REQUIRED", "You have to provide a role.", 400));
+    
     if (!emailRegex.test(req.body.email)) return next(new ExpressError("EMAIL_FORMAT_ERROR", "You have provided an inavlid email address.", 400));
     if (checkString.max(req.body.email, 255)) return next(new ExpressError("EMAIL_TOO_LONG", "You have to provide an email address with a maximum length of 255 chars.", 400));
 
@@ -132,6 +134,7 @@ const Signup: RequestHandler = async (req: Request, res: Response, next: Functio
         _id: new mongoose.Types.ObjectId(),
         username: req.body.username,
         name: req.body.name,
+        role: req.body.role,
         firstname: req.body.firstname,
         email: req.body.email,
         password: hashed,
@@ -149,7 +152,7 @@ const Signup: RequestHandler = async (req: Request, res: Response, next: Functio
             _id: createdUser._id,
             username: req.body.username,
             permissions: [],
-            role: null,
+            role: req.body.role,
             firstname: req.body.firstname == "" ? null : req.body.firstname,
             name: req.body.name == "" ? null : req.body.name,
             avatar: avatar
@@ -159,7 +162,7 @@ const Signup: RequestHandler = async (req: Request, res: Response, next: Functio
             _id: createdUser._id,
             username: req.body.username,
             permissions: [],
-            role: null,
+            role: req.body.role,
             firstname: req.body.firstname == "" ? null : req.body.firstname,
             name: req.body.name == "" ? null : req.body.name
 
@@ -176,7 +179,7 @@ const Signup: RequestHandler = async (req: Request, res: Response, next: Functio
 };
 
 const Logout: RequestHandler = (req: Request, res: Response) => {
-    res.status(200).json({ message: "LOGOUT_AUTOMATICALLY", note: "Tokens are saved for one hour. After that, you are automatically logged out. Just remove the token from the Client." });
+    res.status(200).json({ message: "LOGOUT_AUTOMATICALLY", note: "Tokens are valid for one hour. After that, you are automatically logged out. Just remove the token from the Client." });
 }
 
 const Grant: RequestHandler = (req: Request, res: Response) => {
@@ -198,4 +201,12 @@ const Role: RequestHandler = (req: Request, res: Response) => {
 
 }
 
-export { Login, Signup, Logout, Revoke, Grant, Permissions, Role };
+const Roles: RequestHandler = (req: Request, res: Response, next: Function) => {
+    
+    RoleM.find({}).exec(function(err, roles){
+        if(err) return next(new ExpressError("INTERNAL_ERROR_COULD_NOT_READ_ROLES"), err.message)
+        res.status(200).json({ message: "OK", docs: roles });
+    });
+}
+
+export { Login, Signup, Logout, Revoke, Grant, Permissions, Role, Roles };

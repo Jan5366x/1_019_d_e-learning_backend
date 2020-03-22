@@ -24,6 +24,10 @@ import StepRouter from "./step/routes";
 // Create a new express application instance
 const app: express.Application = express();
 
+//Startup Script
+import StartUp from "./init"
+
+
 // Logging
 
 const morganExcludedUrls: Array<String> = [];
@@ -61,6 +65,8 @@ ${!mongoUserAuth ? "" : config.mongodb.password}\
 ${!mongoUserAuth ? "" : "@"}${config.mongodb.domain || "localhost"}:\
 ${config.mongodb.port || 27017}/${config.mongodb.database}`, { useNewUrlParser: true, useUnifiedTopology: true });
 
+StartUp.checkDB()
+
 // ROUTES
 
 app.use("/user", UserManageRouter);
@@ -79,7 +85,6 @@ app.get("/version", (req, res) => { res.status(200).json({ message: "OK", versio
 app.use((req, res, next) => {
   next(new ExpressError("PAGE_NOT_FOUND", "Sorry, we could't find the page you've requested!", 404));
 });
-
 
 // Error handling
 

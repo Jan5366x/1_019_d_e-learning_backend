@@ -4,11 +4,9 @@ import {
     ReadAll as ReadAllController,
     ReadById as ReadByIdController,
     ReadByTitle as ReadByTitleController,
-    ReadByDate as ReadByDateController,
-    ReadByDateStartEnd as ReadByDateStartEndController,
     Update as UpdateController,
     Delete as DeleteController
-} from "./controllers";
+} from "./lessonController";
 
 const router: express.Router = express.Router();
 
@@ -16,16 +14,41 @@ const router: express.Router = express.Router();
 router.get("/", ReadAllController);
 router.get("/oneById/:id", ReadByIdController);
 router.get("/oneByTitle/:title", ReadByTitleController);
-router.get("/oneByDate/:date", ReadByDateController)
-router.get("/byStartAndEnd/:startDate/:endDate", ReadByDateStartEndController)
 
 //POST ROUTES
-router.post("/create", CreateController);
+router.post("/", CreateController);
 
 //PUT ROUTES
-router.put("/:id", UpdateController); 
+router.put("/:id", UpdateController);
 
 //DELETE ROUTES
 router.delete("/:id", DeleteController);
+
+import {
+    GetAll as PlannedGetAllController,
+    GetBetween as PlannedGetBetweenController,
+    GetById as PlannedGetByIDController,
+    Create as PlannedCreateController,
+    Update as PlannedUpdateController,
+    Delete as PlannedDeleteController
+} from "./plannedLessonController"
+
+const plannedRouter = express.Router();
+
+router.use("/planned", plannedRouter)
+
+// GET ROUTES
+plannedRouter.get("/", PlannedGetAllController)
+plannedRouter.get("/:startDate/:endDate", PlannedGetBetweenController)
+plannedRouter.get("/:_id", PlannedGetByIDController)
+
+// POST ROUTES
+plannedRouter.post("/", PlannedCreateController)
+
+// PUT ROUTES
+plannedRouter.put("/:_id", PlannedUpdateController)
+
+//DELETE ROUTES
+plannedRouter.delete("/:_id", PlannedDeleteController)
 
 export default router;
