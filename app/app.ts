@@ -63,8 +63,8 @@ ${!mongoUserAuth ? "" : ":"}\
 ${!mongoUserAuth ? "" : config.mongodb.password}\
 ${!mongoUserAuth ? "" : "@"}${config.mongodb.domain || "localhost"}:\
 ${config.mongodb.port || 27017}/${config.mongodb.database}`, { useNewUrlParser: true, useUnifiedTopology: true });
-StartUp.checkDB()
 
+StartUp.checkDB()
 
 // ROUTES
 
