@@ -1,6 +1,9 @@
 stages:
+  - test
   - build
+  - build_container
   - deploy
+  - cit
 
 # skeleton to build container
 .build_container_skeleton:
@@ -29,35 +32,84 @@ stages:
   before_script:
     - export DEBIAN_FRONTEND="noninteractive"
     - apt-get update -qq
-    - apt-get install -y openssh-client    
+    - apt-get install -y openssh-client curl jq
     - eval $(ssh-agent -s)
     - echo "$SSH_PRIVATE_KEY" | tr -d '\r' | ssh-add -
     - mkdir -p ~/.ssh
     - chmod 700 ~/.ssh
 
+test:
+  image: node:latest
+  stage: test
+  before_script:
+  script:
+    - echo "implement tests..."
 
-# Taged with :latest
+# Heavy build environment ...
+build:
+  image: debian:buster-slim
+  stage: build
+  before_script:
+    - export DEBIAN_FRONTEND="noninteractive"
+    - apt-get update -qq
+    - apt-get install -y nodejs npm
+    # used to update some varaibles during the build
+    #- sed -i "s#\$SECRET_ACCESS_KEY#${SECRET_ACCESS_KEY}#" app/documentFile/controllers.ts
+    #- sed -i "s#\$ACCESS_KEY#${ACCESS_KEY}#" app/documentFile/controllers.ts
+  script:
+    - npm i
+    # workaround to get it running ...
+    - npm install bcrypt
+    - npm run tsc
+  artifacts:
+    paths:
+      - build/
+      - node_modules
+
+# Not working, due to some issues with bcrypt      
+#build:
+#  image: node:latest
+#  stage: build
+#  script:
+#    - npm i
+#    - npm run tsc
+#  artifacts:
+#    paths:
+#      - build/
+#      - node_modules/
+
+# Taged with :live
 build_container:
   extends: .build_container_skeleton
-  stage: build
+  stage: build_container
+  dependencies:
+    - build
   variables:
-    REGISTRY_IMAGE_TAG: "live"
+    REGISTRY_IMAGE_TAG: "latest" # should be changed to live for production
   only:
+    - master
     - live
+    - ci
 
+# @TODO: Should be changed to live when development is finished.
 # deploy image to the EC2
 deploy:
   <<: *deployer
   stage: deploy
   variables:
     HOST: "ec2-18-184-245-52.eu-central-1.compute.amazonaws.com"
-    TAG: "live"
+    TAG: "latest" # should be changed to live for production
   only:
-    - live
+    - master
+    - ci
   script:
     - ssh ubuntu@${HOST} -o StrictHostKeyChecking=no "docker --version"
     - ssh ubuntu@${HOST} -o StrictHostKeyChecking=no "docker login -u $CI_REGISTRY_USER -p $CI_REGISTRY_PASSWORD $CI_REGISTRY"
     - ssh ubuntu@${HOST} -o StrictHostKeyChecking=no "docker stop $CI_PROJECT_NAME || true"
     - ssh ubuntu@${HOST} -o StrictHostKeyChecking=no "docker rm $CI_PROJECT_NAME || true"
     - ssh ubuntu@${HOST} -o StrictHostKeyChecking=no "docker pull $CI_REGISTRY_IMAGE:$TAG"
-    - ssh ubuntu@${HOST} -o StrictHostKeyChecking=no "docker run -p 2222:22 -d --name $CI_PROJECT_NAME $CI_REGISTRY_IMAGE:$TAG"
+    - ssh ubuntu@${HOST} -o StrictHostKeyChecking=no "docker run -p 3000:3000 -d --name $CI_PROJECT_NAME $CI_REGISTRY_IMAGE:$TAG"
+    - ssh ubuntu@${HOST} -o StrictHostKeyChecking=no "docker inspect -f '{{.State.Running}}' $CI_PROJECT_NAME"
+    # Check if service is up
+    - curl -m 1 --request GET ${HOST}:3000/version | jq .
+  when: manual
