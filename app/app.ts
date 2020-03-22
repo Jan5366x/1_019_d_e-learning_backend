@@ -1,6 +1,7 @@
 // lib/app.ts
 import express from 'express';
 import UserManageRouter from "./user/routes"
+import CourseRouter from "./course/routes"
 import LessonRouter from "./lesson/routes"
 import bodyParser from "body-parser";
 import morgan from "morgan";
@@ -52,6 +53,7 @@ ${config.mongodb.port || 27017}/${config.mongodb.database}`, { useNewUrlParser: 
 // ROUTES
 
 app.use("/user", UserManageRouter);
+app.use("/course", CourseRouter);
 app.use("/lesson", LessonRouter);
 
 // STATIC
