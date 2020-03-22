@@ -30,7 +30,7 @@ const ReadAll: RequestHandler = (req: Request, res: Response, next: Function) =>
 };
 
 const ReadById: RequestHandler = (req: Request, res: Response, next: Function) => {
-    Quiz.findById(req.params.id).exec(function (err: Error, quiz: IQuiz) {
+    Quiz.findById(req.params.id).populate("questions").exec(function (err: Error, quiz: IQuiz) {
         if (err || quiz == null) {
             return next(new ExpressError("INTERNAL_ERROR_COULD_NOT_READ", err?.message, 500));
         }
