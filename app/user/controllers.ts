@@ -139,14 +139,14 @@ const Signup: RequestHandler = async (req: Request, res: Response, next: Functio
             permissions: []
 
         }, config.jsonwebtoken, { expiresIn: 3700 }),
-        furtherRequests: {
+        furtherRequests: [{
             type: "POST",
             description: "USER_LOGIN",
             url: "http://" + req.headers.host + "/user/login",
             body: { email: "String", username: "String", password: "String" },
             authenticationNeeded: false,
             permissionsNeeded: []
-        }
+        }]
     })
 };
 
