@@ -56,7 +56,7 @@ const Update: RequestHandler = (req: Request, res: Response, next: Function) => 
         return next(new ExpressError("INTERNAL_ERROR_COULD_NOT_UPDATE", err.message, 500)); 
     });
 
-    res.status(200).json({ message: "OK!" });
+    res.status(200).json({ message: "OK" });
 };
 
 const Delete: RequestHandler = (req: Request, res: Response, next: Function) => {
@@ -65,7 +65,7 @@ const Delete: RequestHandler = (req: Request, res: Response, next: Function) => 
     Lesson.deleteOne({_id: req.params.id}, function(err){
         return next(new ExpressError("INTERNAL_ERROR_COULD_NOT_UPDATE", err.message, 500)); 
     }); 
-    res.status(200).json({ message: "OK!" });
+    res.status(200).json({ message: "OK" });
 };
 
 export { Create, ReadAll, ReadById, ReadByTitle, Update, Delete };

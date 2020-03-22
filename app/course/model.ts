@@ -1,6 +1,6 @@
 import mongoose from "mongoose";
-//import Lesson from "../lesson/model"; 
-import UserM from "../user/model"
+import Lesson from "../lesson/model"; 
+
 
 const CourseSchema = new mongoose.Schema({
     _id: mongoose.Schema.Types.ObjectId,
@@ -10,11 +10,14 @@ const CourseSchema = new mongoose.Schema({
         minlength: 3,
         maxlength: 255
     },
-    //Lessons: [Lesson]
-    student:[{
-        type: mongoose.Schema.Types.ObjectId,
-        ref: "User"
+    Lessons: [{
+        type: mongoose.Schema.Types.ObjectId, 
+        ref: "Lesson"
     }]
+    // student:[{
+    //     type: mongoose.Schema.Types.ObjectId,
+    //     ref: "User"
+    // }]
 });
 
 export default mongoose.model("Course", CourseSchema);

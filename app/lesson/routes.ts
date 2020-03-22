@@ -12,8 +12,8 @@ const router: express.Router = express.Router();
 
 //GET ROUTES
 router.get("/", ReadAllController);
-router.get("/:id", ReadByIdController);
-router.get("/one/:title", ReadByTitleController);
+router.get("/oneById/:id", ReadByIdController);
+router.get("/oneByTitle/:title", ReadByTitleController);
 
 //POST ROUTES
 router.post("/create", CreateController);

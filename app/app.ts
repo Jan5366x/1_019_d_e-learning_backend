@@ -8,7 +8,6 @@ import morgan from "morgan";
 import ExpressError from "./classes/ExpressError";
 import mongoose from "mongoose";
 import config from "./config";
-import pjson from "../package.json";
 
 // Create a new express application instance
 const app: express.Application = express();
