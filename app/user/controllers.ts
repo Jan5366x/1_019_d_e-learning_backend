@@ -13,10 +13,10 @@ const emailRegex: RegExp = /(?:[a-z0-9!#$%&'*+/=?^_`{|}~-]+(?:\.[a-z0-9!#$%&'*+/
 
 
 /**
- * #Route /user/login
+ * # Route /user/login
  * 
- * ##StatusCodes
- * ###500
+ * ## StatusCodes
+ * ### 500
  * - INTERNAL_ERROR_GETTING_USER
  */
 const Login: RequestHandler = async (req: Request, res: Response, next: Function) => {
