@@ -85,7 +85,6 @@ app.use((req, res, next) => {
   next(new ExpressError("PAGE_NOT_FOUND", "Sorry, we could't find the page you've requested!", 404));
 });
 
-
 // Error handling
 
 app.use((error: ExpressError, req: express.Request, res: express.Response, next: Function) => {

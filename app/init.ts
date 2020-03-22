@@ -23,4 +23,4 @@ var checkDB: Function =  () => {
     })
 }
 
-module.exports = { checkDB }
+export default { checkDB }
