@@ -1,10 +1,11 @@
 import mongoose, { SchemaType, Document } from 'mongoose';
-import { AnswerSchema } from './Answer';
+import { AnswerSchema, IAnswer } from './Answer';
 
 export interface IQuestion extends Document {
     _id: SchemaType;
     type: number;
     question: string;
+    answers: [IAnswer]
 }
 
 export const QuestionSchema = new mongoose.Schema({  
