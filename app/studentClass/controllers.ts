@@ -8,6 +8,8 @@ const Create: RequestHandler = async (req: Request, res: Response, next: Functio
     // Create new Lesson
     // Save in MongoDB
 
+    //Needs validation that elements are present
+
     var studentClass = new StudentClass({
         _id: new mongoose.Types.ObjectId(),
         name: req.body.name,
@@ -19,6 +21,7 @@ const Create: RequestHandler = async (req: Request, res: Response, next: Functio
         //duties: req.body.duties
         //files: req.body.files
         //chats: req.body.chats
+        //tasks: req.body.tasks
     }); 
 
     console.log(studentClass); 
