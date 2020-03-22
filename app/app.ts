@@ -4,6 +4,8 @@ import ExpressError from "./classes/ExpressError";
 import express from 'express';
 
 //Express modules
+import UserManageRouter from "./user/routes"
+import DocumentFileRouter from "./documentFile/routes"
 import bodyParser from "body-parser";
 import morgan from "morgan";
 import mongoose from "mongoose";
@@ -70,6 +72,8 @@ app.use("/avatartemplates", AvatarTemplatesRouter)
 app.get("/version", (req, res) => { res.status(200).json({ message: "OK", version: pjson.version }) });
 
 // 404
+
+app.use("/documentFile", DocumentFileRouter);
 
 app.use((req, res, next) => {
   next(new ExpressError("PAGE_NOT_FOUND", "Sorry, we could't find the page you've requested!", 404));
