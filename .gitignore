@@ -118,3 +118,5 @@ dist
 
 # IntelliJ IDEA
 .idea
+
+docs/_build/
