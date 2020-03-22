@@ -6,8 +6,7 @@ import morgan from "morgan";
 import ExpressError from "./classes/ExpressError";
 import mongoose from "mongoose";
 import config from "./config";
-import MultipleChoiceTasks from './multiplechoicetasks/routes';
-
+import QuizRoutes from './quizs/routes';
 
 // Create a new express application instance
 const app: express.Application = express();
@@ -35,7 +34,7 @@ ${config.mongodb.port || 27017}/${config.mongodb.database}`, { useNewUrlParser: 
 // ROUTES
 
 app.use("/user", UserManageRouter);
-app.use("/multiplechoicetask", MultipleChoiceTasks);
+app.use("/quiz", QuizRoutes);
 
 // 404
 
