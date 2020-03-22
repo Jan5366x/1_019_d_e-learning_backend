@@ -58,6 +58,19 @@ const ReadByDate: RequestHandler = (req: Request, res: Response, next: Function)
     });
 };
 
+const ReadByDateStartEnd: RequestHandler = (req: Request, res: Response, next: Function) => {
+    // Read all Lessons
+    // Save in MongoDB
+    Lesson.find({date: {
+        $gte: req.params.startDate,
+        $lte: req.params.endDate
+    }}).exec(function (err: Error, docs: Document) {
+        if (err) return next(new ExpressError("INTERNAL_ERROR_COULD_NOT_READ", err.message, 500));
+        console.log(docs)
+        res.status(200).json({ meassage: "OK", docs: docs });
+    });
+};
+
 const Update: RequestHandler = (req: Request, res: Response, next: Function) => {
     // Update Lesson
     // Save in MongoDB
@@ -78,4 +91,4 @@ const Delete: RequestHandler = (req: Request, res: Response, next: Function) => 
     res.status(200).json({ message: "OK" });
 };
 
-export { Create, ReadAll, ReadById, ReadByTitle, ReadByDate, Update, Delete };
+export { Create, ReadAll, ReadById, ReadByTitle, ReadByDate, ReadByDateStartEnd, Update, Delete };

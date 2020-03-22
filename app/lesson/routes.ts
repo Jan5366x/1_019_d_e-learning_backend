@@ -5,6 +5,7 @@ import {
     ReadById as ReadByIdController,
     ReadByTitle as ReadByTitleController,
     ReadByDate as ReadByDateController,
+    ReadByDateStartEnd as ReadByDateStartEndController,
     Update as UpdateController,
     Delete as DeleteController
 } from "./controllers";
@@ -16,6 +17,8 @@ router.get("/", ReadAllController);
 router.get("/oneById/:id", ReadByIdController);
 router.get("/oneByTitle/:title", ReadByTitleController);
 router.get("/oneByDate/:date", ReadByDateController)
+router.get("/byStartAndEnd/:startDate/:endDate", ReadByDateStartEndController)
+
 //POST ROUTES
 router.post("/create", CreateController);
 
