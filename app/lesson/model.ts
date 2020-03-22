@@ -12,7 +12,7 @@ const LessonSchema = new mongoose.Schema({
     //steps: [Step]
 });
 
-const LessonM = mongoose.model("Lesson", LessonSchema)
+const Lesson = mongoose.model("Lesson", LessonSchema)
 
 const PlannedLessonSchema = new mongoose.Schema({
     _id: { type: mongoose.Schema.Types.ObjectId, required: true },
@@ -22,6 +22,6 @@ const PlannedLessonSchema = new mongoose.Schema({
     course: { type: mongoose.Schema.Types.ObjectId, ref: "Lesson", required: true }
 });
 
-const PlannedLessonM = mongoose.model("PlannedLesson", PlannedLessonSchema);
+const PlannedLesson = mongoose.model("PlannedLesson", PlannedLessonSchema);
 
-export { LessonM, PlannedLessonM }
+export { Lesson as LessonM, PlannedLesson as PlannedLessonM }
