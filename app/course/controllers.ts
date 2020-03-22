@@ -48,7 +48,7 @@ const Update: RequestHandler = (req: Request, res: Response, next: Function) => 
     // Save in MongoDB
     console.log(req.params.id + " ; " + req.body.title)
     var result = Course.updateOne({_id: req.params.id}, {title: req.body.title}).exec(function(err:Error){
-        return next(new ExpressError("INTERNAL_ERROR_COULD_NOT_UPDATE", err.message, 500));
+       if(err) return next(new ExpressError("INTERNAL_ERROR_COULD_NOT_UPDATE", err.message, 500));
     });
     res.status(200).json({ message: "OK" });
 };
@@ -57,7 +57,7 @@ const Delete: RequestHandler = (req: Request, res: Response, next: Function) => 
     // Delete Lesson
     // Save in MongoDB
     Course.deleteOne({_id: req.params.id}, function(err){
-        return next(new ExpressError("INTERNAL_ERROR_COULD_NOT_DELETE", ""+err, 400));
+        if(err) return next(new ExpressError("INTERNAL_ERROR_COULD_NOT_DELETE", ""+err, 400));
     }); 
     res.status(200).json({ message: "OK" });
 };

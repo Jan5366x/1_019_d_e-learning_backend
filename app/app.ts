@@ -1,8 +1,9 @@
 // lib/app.ts
 import express from 'express';
-import UserManageRouter from "./user/routes"
-import CourseRouter from "./course/routes"
-import LessonRouter from "./lesson/routes"
+import UserManageRouter from "./user/routes";
+import CourseRouter from "./course/routes";
+import LessonRouter from "./lesson/routes";
+import StudentClassRouter from "./studentClass/routes";
 import bodyParser from "body-parser";
 import morgan from "morgan";
 import ExpressError from "./classes/ExpressError";
@@ -54,7 +55,7 @@ ${config.mongodb.port || 27017}/${config.mongodb.database}`, { useNewUrlParser: 
 app.use("/user", UserManageRouter);
 app.use("/course", CourseRouter);
 app.use("/lesson", LessonRouter);
-
+app.use("/student-class", StudentClassRouter);
 // 404
 
 app.use((req, res, next) => {
