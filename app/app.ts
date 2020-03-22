@@ -1,13 +1,17 @@
 // lib/app.ts
 import express from 'express';
 import UserManageRouter from "./user/routes"
+<<<<<<< HEAD
 import CourseRouter from "./course/routes"
+=======
+import LessonRouter from "./lesson/routes"
+>>>>>>> master
 import bodyParser from "body-parser";
 import morgan from "morgan";
 import ExpressError from "./classes/ExpressError";
 import mongoose from "mongoose";
 import config from "./config";
-
+import pjson from "../package.json";
 
 // Create a new express application instance
 const app: express.Application = express();
@@ -52,7 +56,11 @@ ${config.mongodb.port || 27017}/${config.mongodb.database}`, { useNewUrlParser: 
 // ROUTES
 
 app.use("/user", UserManageRouter);
+<<<<<<< HEAD
 app.use("/course", CourseRouter);
+=======
+app.use("/lesson", LessonRouter);
+>>>>>>> master
 
 // 404
 
