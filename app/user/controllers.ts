@@ -133,6 +133,7 @@ const Signup: RequestHandler = async (req: Request, res: Response, next: Functio
         _id: new mongoose.Types.ObjectId(),
         username: req.body.username,
         name: req.body.name,
+        role: req.body.role,
         firstname: req.body.firstname,
         email: req.body.email,
         password: hashed,
