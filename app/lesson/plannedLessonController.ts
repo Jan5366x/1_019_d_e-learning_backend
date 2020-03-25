@@ -12,7 +12,7 @@ const GetAll: RequestHandler = async (req: Request, res: Response, next: Functio
         return next(new ExpressError("INTERNAL_ERROR_GET_PLANNED_LESSONS", e.message, 500))
     }
 
-    res.status(200).send({ message: "OK", planned: plannedLessons });
+    res.status(200).send({ message: "OK", plannedLesson: plannedLessons });
 }
 
 const GetBetween: RequestHandler = async (req: Request, res: Response, next: Function) => {
@@ -29,7 +29,7 @@ const GetBetween: RequestHandler = async (req: Request, res: Response, next: Fun
         return next(new ExpressError("INTERNAL_ERROR_GET_PLANNED_LESSONS", e.message, 500))
     }
 
-    res.status(200).send({ message: "OK", planned: plannedLessons, startPoint: startDate.getTime(), endPoint: endDate.getTime() });
+    res.status(200).send({ message: "OK", plannedLesson: plannedLessons, startPoint: startDate.getTime(), endPoint: endDate.getTime() });
 }
 
 
@@ -40,7 +40,7 @@ const GetById: RequestHandler = async (req: Request, res: Response, next: Functi
         return next(new ExpressError("INTERNAL_ERROR_GET_PLANNED_LESSONS", e.message, 500))
     }
 
-    res.status(200).send({ message: "OK", planned: plannedLessons });
+    res.status(200).send({ message: "OK", planneLesson: plannedLessons });
 }
 
 const Create: RequestHandler = async (req: Request, res: Response, next: Function) => {
