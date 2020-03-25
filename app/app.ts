@@ -21,12 +21,24 @@ import QuizRouter from './quizs/routes';
 import StudentClassRouter from "./studentClass/routes";
 import StepRouter from "./step/routes";
 
+
+import cors from "cors";
 // Create a new express application instance
 const app: express.Application = express();
 
 //Startup Script
 import StartUp from "./init"
 
+
+const corsOptions = {
+  origin: ['*'],
+  allowedHeaders: ["Content-Type", "Authorization", "Access-Control-Allow-Methods", "Access-Control-Request-Headers"],
+  credentials: true,
+  enablePreflight: true
+}
+
+app.use(cors(corsOptions));
+app.options("*", cors(corsOptions));
 
 // Logging
 
@@ -42,7 +54,7 @@ app.use(bodyParser.json());
 
 app.set("x-powered-by", false);
 
-app.use((req, res, next) => {
+/*app.use((req, res, next) => {
   res.header("Access-Control-Allow-Origin", "*");
   res.header(
     "Access-Control-Allow-Headers",
@@ -54,7 +66,7 @@ app.use((req, res, next) => {
     return res.status(200).json({});
   }
   next();
-});
+});*/
 
 // MONGODB
 
